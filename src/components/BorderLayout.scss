@@ -1,0 +1,44 @@
+/*
+ * @Author: yejianfei
+ * @Date: 2023-04-03 10:37:15
+ * @LastEditors: yejianfei
+ * @LastEditTime: 2023-04-03 13:26:12
+ * @Description: 
+ * @Developer: 
+ */
+
+ .boder-layout {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+
+  .center-container {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .center-panel {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+  }
+
+  .north-panel {
+    width: 100%;
+  }
+
+  .south-panel {
+    width: 100%;
+  }
+
+  .west-panel {
+    height: 100%;
+  }
+
+  .east-panel {
+    height: 100%;
+  }
+ }

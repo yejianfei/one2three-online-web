@@ -1,0 +1,34 @@
+{
+  "success": true,
+  "data": [{
+    "key": "home",
+    "label": "首页",
+    "icon": "icon-home",
+    "path": "/admin/home"
+  },{
+    "key": "hospitals",
+    "label": "医院管理",
+    "icon": "icon-hospital",
+    "path": "/admin/hospitals"
+  },{
+    "key": "departments",
+    "label": "科室管理",
+    "icon": "icon-department",
+    "path": "/admin/departments"
+  },{
+    "key": "questionnaires",
+    "label": "问卷管理",
+    "icon": "icon-questionnaires",
+    "path": "/admin/questionnaires"
+  },{
+    "key": "doctors",
+    "label": "医护人员",
+    "icon": "icon-doctor",
+    "path": "/admin/doctors"
+  },{
+    "key": "users",
+    "label": "运营账号",
+    "icon": "icon-users",
+    "path": "/admin/users"
+  }]
+}
