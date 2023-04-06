@@ -16,6 +16,11 @@
     "icon": "icon-department",
     "path": "/admin/departments"
   },{
+    "key": "diagnosis",
+    "label": "诊疗项目",
+    "icon": "icon-diagnosis",
+    "path": "/admin/diagnosis"
+  },{
     "key": "questionnaires",
     "label": "问卷管理",
     "icon": "icon-questionnaires",

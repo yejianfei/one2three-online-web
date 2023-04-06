@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-04 20:58:29
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-05 13:54:38
+ * @LastEditTime: 2023-04-06 12:15:15
  * @Description: 
  * @Developer: 
  */
@@ -11,8 +11,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import APIForm, { APIFormProps } from './APIForm'
 import Separator from '../Separator'
 
-type APIFormModalProps<Values = any> = {
-  form: APIFormProps
+type APIFormModalProps<Values extends object = any> = {
+  form: APIFormProps<Values>
 } & ModalProps
 
 export default function (props: APIFormModalProps) {

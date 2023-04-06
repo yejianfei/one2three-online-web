@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2022-05-28 18:22:45
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-05 15:47:35
+ * @LastEditTime: 2023-04-06 12:57:08
  * @Description: 
  * @Developer: 
  */
@@ -17,7 +17,7 @@ const api = Api()
 
 type Params = {page?: number, size?: number} & {[key:string]: boolean | string | number | Date | string[] | number[] | Date[]}
 
-type Props<RecordType extends object = any> = {
+type Props<RecordType extends object = any, FormValues extends object = any > = {
   load?: string
   initialParams?: Params
   params?: Params,
@@ -25,7 +25,7 @@ type Props<RecordType extends object = any> = {
   actionType?: string,
   modal?: boolean
   selected?: string
-  form?: APIFormProps & {title: string}
+  form?: APIFormProps<FormValues> & {title: string}
   search?: {
     children?: (table: any) => ReactNode
   }

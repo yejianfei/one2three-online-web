@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2022-05-26 13:54:33
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-03 22:36:44
+ * @LastEditTime: 2023-04-06 12:09:21
  * @Description: 
  * @Developer: 
  */
@@ -10,6 +10,7 @@ import React from 'react'
 import LoginPage from './pages/LoginPage'
 import AdminHomePage from './pages/admin/HomePage'
 import AdminUserLIstPage from './pages/admin/UserListPage'
+import AdminDiagnosticListPage from './pages/admin/DiagnosticListPage'
 
 export default [
   {
@@ -37,6 +38,13 @@ export default [
       },{
         path: "users",
         component: AdminUserLIstPage,
+        isExact: true,
+        meta: {
+          title: '运营账号'
+        }
+      },{
+        path: "diagnosis",
+        component: AdminDiagnosticListPage,
         isExact: true,
         meta: {
           title: '运营账号'

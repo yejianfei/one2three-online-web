@@ -2,23 +2,24 @@
  * @Author: yejianfei
  * @Date: 2022-05-28 15:26:23
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-05 14:40:13
+ * @LastEditTime: 2023-04-06 14:22:50
  * @Description: 
  * @Developer: 
  */
-import React, { forwardRef, useEffect, useRef, useState } from 'react'
+import React, { forwardRef, useEffect } from 'react'
 import { Form, FormProps } from 'antd'
-import Api from '../../api'
-import type { FormInstance } from 'antd/es/form';
-import { cloneDeep, cloneDeepWith, merge } from 'lodash';
+import { cloneDeep, merge } from 'lodash'
 
-export type APIFormProps<Values = any> = {
+import Api from '../../api'
+
+export type APIFormProps<Values> = {
   ref?: any
   value?: string
   idProp?: string
   action?: string
   loader?: string
   onBeforeLoad?: (value: string) => Promise<any>
+  onLoaded?: (value: string) => Promise<any>
   onBeforeRequest?: (method: 'post' | 'put', values: Values) => (Values | false) | Promise<Values | false>
   onRequestSucceeded?: <R = any>(method: 'post' | 'put', res: R, values: Values) => void
   onRequestFailed?: (method: 'post' | 'put', error: Error, values: Values,) => void
@@ -40,15 +41,15 @@ export default forwardRef((props: APIFormProps<any>, formRef: any) => {
           
           return api.get(loader, {params})
         })
+        .then((data: any) =>  props.onLoaded ? props.onLoaded(data) : data)
         .then((data: any) => {
-          console.log(data)
           formRef.current?.setFieldsValue(data)
         })
     }
    
   }, [props.value])
   
-  const onFinish = props.onFinish || ((values: any) => {
+    const onFinish = props.onFinish || ((values: any) => {
     const method = values[props.idProp || 'id'] || props.value ? 'put' : 'post'
     const succeeded = props.onRequestSucceeded || (() => {})
     const failed = props.onRequestFailed || (() => {})
@@ -81,6 +82,7 @@ export default forwardRef((props: APIFormProps<any>, formRef: any) => {
   delete (options as any).onBeforeRequest
   delete (options as any).onRequestSucceeded
   delete (options as any).onRequestFailed
+  delete (options as any).onLoaded
   
   return <Form ref={formRef} { ...options as any } />
 })

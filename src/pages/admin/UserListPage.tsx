@@ -2,19 +2,16 @@
  * @Author: yejianfei
  * @Date: 2023-04-03 22:34:45
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-05 15:39:46
+ * @LastEditTime: 2023-04-06 13:35:00
  * @Description: 
  * @Developer: 
  */
 import React from 'react'
-import View from '../../components/View'
 import AdminPage from '../../components/antd/AdminPage'
-import { Button, Card, Col, Divider, Form, Input, Modal, Row, Space } from 'antd'
+import { Button, Card, Col, Form, Input, Row, Space } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import APITable from '../../components/antd/APITable'
-import Separator from '../../components/Separator'
 import WithRouter, { WithRouteAttributeProps } from '../../components/WithRouter'
-import APIFormModal from '../../components/antd/APIFormModal'
 
 type Props = {
 
@@ -25,10 +22,6 @@ type RouteParams = {
 }
 
 type State = {
-  selected?: string
-  params?: {
-    timestamp?: number
-  }
 }
 
 @WithRouter()
@@ -50,12 +43,12 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
               group: 'cn.com.one2three.admin',
               filters: true
             }}
-            params={this.state.params}
+
             size='small'
             rowKey='id'
             // scroll={{y: 100}}
             pagination={{showSizeChanger: false}}
-            selected={this.state.selected}
+ 
             columns={[{
               title: '账号名称',
               width: 200,
@@ -93,22 +86,22 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
             search = {{
               children: (table: any) => {
                 return (
-                  <>
-                    <Row>
-                      <Col flex={1}>
-                        <Space>
-                          <Form.Item>
-                            <Button onClick={() => table.modal()} icon={<UserAddOutlined />}  />
-                          </Form.Item>
-                        </Space>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item name={['keywords']}>
-                          <Input.Search placeholder='输入账号名称检索' allowClear enterButton onSearch={() => table.search()} />
+                  <Row>
+                    <Col span={8}>
+                      <Form.Item name={['keywords']}>
+                        <Input.Search placeholder='输入账号名称检索' allowClear enterButton onSearch={() => table.search()} />
+                      </Form.Item>
+                    </Col>
+                    <Col flex={1}>
+                      <Row justify='end'>
+                      <Space>
+                        <Form.Item>
+                          <Button onClick={() => table.modal()} icon={<UserAddOutlined />}  />
                         </Form.Item>
-                      </Col>
-                    </Row>
-                  </>
+                        </Space>
+                      </Row>
+                    </Col>
+                  </Row>
                 )
               }
             }}
@@ -117,12 +110,12 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
               action: '/admin/users',
               loader: '/admin/users/:id',
               name: 'user-form',
-              value: this.state.selected,
               initialValues: {
                 group: 'cn.com.one2three.admin', 
                 mode: 0
               },
-              children: (
+              onLoaded: async (values: any) => ({...values, password: Date.now()}),
+              children: (values) => (
                 <>
                   <Form.Item
                     label='账号名称'
@@ -130,7 +123,7 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                     name={['username']}
                     rules={[{ required: true, message: '请输入登录账号' }]}
                   >
-                    <Input placeholder='输入登录账号' />
+                    <Input disabled={!!values.id} placeholder='输入登录账号' />
                   </Form.Item>
                   <Form.Item
                     label='登录密码'
@@ -138,7 +131,7 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                     name={['password']}
                     rules={[{ required: true, message: '请输入登录密码' }]}
                   >
-                    <Input.Password placeholder='入登录密码' />
+                    <Input.Password disabled={!!values.id} placeholder='入登录密码' />
                   </Form.Item>
                   <Form.Item
                     label='真实姓名'
