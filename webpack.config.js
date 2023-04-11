@@ -128,7 +128,7 @@ module.exports = (env, options) => {
       compress: true,
       proxy: {
         '/api': env.local ? {
-          target: 'http://127.0.0.1:3008/',
+          target: 'http://127.0.0.1:8980/',
           pathRewrite: { '^/api': '' },
         } : {
           target: 'https://api.endotube.cn',

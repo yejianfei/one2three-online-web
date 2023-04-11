@@ -11,6 +11,8 @@ import LoginPage from './pages/LoginPage'
 import AdminHomePage from './pages/admin/HomePage'
 import AdminUserLIstPage from './pages/admin/UserListPage'
 import AdminDiagnosticListPage from './pages/admin/DiagnosticListPage'
+import AdminHospitalListPage from './pages/admin/HospitalListPage'
+import AdminDepartmentListPage from './pages/admin/DepartmentListPage'
 
 export default [
   {
@@ -47,7 +49,21 @@ export default [
         component: AdminDiagnosticListPage,
         isExact: true,
         meta: {
-          title: '运营账号'
+          title: '诊疗项目'
+        }
+      },{
+        path: "hospitals",
+        component: AdminHospitalListPage,
+        isExact: true,
+        meta: {
+          title: '医院管理'
+        }
+      },{
+        path: "departments",
+        component: AdminDepartmentListPage,
+        isExact: true,
+        meta: {
+          title: '科室管理'
         }
       }
     ]
