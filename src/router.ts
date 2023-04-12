@@ -13,6 +13,7 @@ import AdminUserLIstPage from './pages/admin/UserListPage'
 import AdminDiagnosticListPage from './pages/admin/DiagnosticListPage'
 import AdminHospitalListPage from './pages/admin/HospitalListPage'
 import AdminDepartmentListPage from './pages/admin/DepartmentListPage'
+import AdminHospotalUserListPage from './pages/admin/HospotalUserListPage'
 
 export default [
   {
@@ -64,6 +65,13 @@ export default [
         isExact: true,
         meta: {
           title: '科室管理'
+        }
+      },{
+        path: "doctors",
+        component: AdminHospotalUserListPage,
+        isExact: true,
+        meta: {
+          title: '医护人员'
         }
       }
     ]
