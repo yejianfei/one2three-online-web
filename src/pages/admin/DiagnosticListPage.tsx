@@ -41,7 +41,7 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
           <APITable
             bordered
             tableLayout='fixed'
-            load={`/admin/organizations/list/:page?type=treatment_item`}
+            load={`/admin/diagnostics/list/:page?type=treatment_item`}
             initialParams={{
               page: 1,
               size: 25,
@@ -62,12 +62,12 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
               title: '所属医院',
               width: 200,
               align: 'center',
-              dataIndex: 'name'
+              dataIndex: ['parent', 'parent', 'name']
             },{
               title: '所属科室',
               width: 200,
               align: 'center',
-              dataIndex: 'phone'
+              dataIndex: ['parent', 'name'],
             },{
               title: '操作',
               dataIndex: 'operation',
@@ -131,8 +131,8 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
             }}
             form = {{
               title: '诊疗项目',
-              action: '/admin/users',
-              loader: '/admin/users/:id',
+              action: '/admin/organizations',
+              loader: '/admin/organizations/:id',
               name: 'user-form',
               initialValues: {
                 type: 'treatment_item',
@@ -144,15 +144,15 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
                     label='项目名称'
                     labelCol={{span: 5}}
                     name={['name']}
-                    rules={[{ required: true, message: '请输入登录账号' }]}
+                    rules={[{ required: true, message: '请输入诊疗项目名称' }]}
                   >
-                    <Input disabled={!!values.id} placeholder='输入诊疗项目名称' />
+                    <Input placeholder='请输入诊疗项目名称' />
                   </Form.Item>
                   <Form.Item
                     label='所属科室'
                     labelCol={{span: 5}}
                     name={['path']}
-                    rules={[{ required: true, message: '请输入登录密码' }]}
+                    rules={[{ required: true, message: '请选择' }]}
                   >
                     <APICascader 
                       loader={{

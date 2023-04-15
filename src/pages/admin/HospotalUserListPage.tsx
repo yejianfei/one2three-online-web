@@ -12,6 +12,7 @@ import { Button, Card, Col, Form, Input, Row, Space, Radio } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import APITable from '../../components/antd/APITable'
 import WithRouter, { WithRouteAttributeProps } from '../../components/WithRouter'
+import APICascader from '../../components/antd/APICascader'
 
 import { HospitalGroupOptions, HospitalGroupFilter } from '../../options'
 
@@ -42,7 +43,7 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
             initialParams={{
               page: 1,
               size: 25,
-              group: 'cn.com.one2three.hospital.doctor',
+              group: 'cn.com.one2three.hospital.*',
               filters: true
             }}
 
@@ -72,7 +73,7 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
               align: 'center',
               dataIndex: 'email'
             },{
-              title: '预约确认',
+              title: '类型',
               width: 200,
               align: 'center',
               dataIndex: 'group',
@@ -168,6 +169,30 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                     rules={[{ required: true, message: '请选择' }]}
                   >
                     <Radio.Group options={HospitalGroupOptions.map(item => ({label: item.name, value: item.id}))} />
+                  </Form.Item>
+                  <Form.Item
+                    label='医院科室'
+                    labelCol={{span: 5}}
+                    name={['organization_paths']}
+                    rules={[{ required: true, message: '请选择' }]}
+                  >
+                    <APICascader 
+                      loader={{
+                        root: '/admin/organizations/tree/:path/children?type=hospital',
+                        children: '/admin/organizations/tree/:path/children',
+                      }}
+                      params={{
+                        path: 'root'
+                      }}
+                      depth={2}
+                      cascadeParamName='path'
+                      placeholder='选择所属医院及科室'
+                      fieldNames={{
+                        label: 'name',
+                        value: 'id',
+                        path: 'full_path'
+                      }}
+                    />
                   </Form.Item>
                 </>
               )
