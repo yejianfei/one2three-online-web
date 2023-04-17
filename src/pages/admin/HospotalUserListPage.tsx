@@ -2,21 +2,19 @@
  * @Author: yejianfei
  * @Date: 2023-04-03 22:34:45
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-17 10:05:12
+ * @LastEditTime: 2023-04-06 13:35:00
  * @Description: 
  * @Developer: 
  */
 import React from 'react'
-import View from '../../components/View'
 import AdminPage from '../../components/antd/AdminPage'
-import { Button, Card, Col, Divider, Form, Input, Modal, Row, Space } from 'antd'
+import { Button, Card, Col, Form, Input, Row, Space, Radio } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import APITable from '../../components/antd/APITable'
-import Separator from '../../components/Separator'
 import WithRouter, { WithRouteAttributeProps } from '../../components/WithRouter'
-import APIFormModal from '../../components/antd/APIFormModal'
 import APICascader from '../../components/antd/APICascader'
-import IconFont from '../../icons'
+
+import { HospitalGroupOptions, HospitalGroupFilter } from '../../options'
 
 type Props = {
 
@@ -30,7 +28,7 @@ type State = {
 }
 
 @WithRouter()
-export default class AdminDiagnosticListPage extends React.Component<Props & WithRouteAttributeProps<RouteParams>, State> {
+export default class AdminUserListPage extends React.Component<Props & WithRouteAttributeProps<RouteParams>, State> {
 
   readonly state: Readonly<State> = {}
 
@@ -41,10 +39,11 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
           <APITable
             bordered
             tableLayout='fixed'
-            loader={`/admin/organizations/list/:page?type=treatment_item`}
+            load={`/admin/users/list/:page`}
             initialParams={{
               page: 1,
               size: 25,
+              group: 'cn.com.one2three.hospital.*',
               filters: true
             }}
 
@@ -54,20 +53,31 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
             pagination={{showSizeChanger: false}}
  
             columns={[{
-              title: '项目名称',
+              title: '账号名称',
+              width: 200,
+              align: 'center',
+              dataIndex: 'username'
+            },{
+              title: '真实姓名',
               width: 200,
               align: 'center',
               dataIndex: 'name'
             },{
-              title: '所属医院',
+              title: '手机号码',
               width: 200,
               align: 'center',
-              dataIndex: ['parent', 'parent', 'name']
+              dataIndex: 'phone'
             },{
-              title: '所属科室',
+              title: '电子邮箱',
               width: 200,
               align: 'center',
-              dataIndex: ['parent', 'name'],
+              dataIndex: 'email'
+            },{
+              title: '类型',
+              width: 200,
+              align: 'center',
+              dataIndex: 'group',
+              render: (value: number) => HospitalGroupFilter[value]
             },{
               title: '操作',
               dataIndex: 'operation',
@@ -86,42 +96,17 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
               children: (table: any) => {
                 return (
                   <Row>
-                    <Col span={4}>
-                      <Form.Item name={['path']}>
-                        <APICascader 
-                          loader={{
-                            root: '/admin/organizations/tree/:path/children?type=hospital',
-                            children: '/admin/organizations/tree/:path/children',
-                          }}
-                          params={{
-                            path: 'root'
-                          }}
-                          depth={2}
-                          cascadeParamName='path'
-                          placeholder='按医院及科室过滤'
-                          fieldNames={{
-                            label: 'name',
-                            value: 'id',
-                            path: 'full_path'
-                          }}
-                          onChange={(value) => {
-                            console.log('ccc', value)
-                          }}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Separator direction='horizontal' size={8} />
                     <Col span={8}>
                       <Form.Item name={['keywords']}>
-                        <Input.Search placeholder='输入诊疗项目名称检索' allowClear enterButton onSearch={() => table.search()} />
+                        <Input.Search placeholder='输入账号名称检索' allowClear enterButton onSearch={() => table.search()} />
                       </Form.Item>
                     </Col>
                     <Col flex={1}>
                       <Row justify='end'>
-                        <Space>
-                          <Form.Item>
-                            <Button onClick={() => table.modal()} icon={<IconFont type='icon-diagnosis-add' />}  />
-                          </Form.Item>
+                      <Space>
+                        <Form.Item>
+                          <Button onClick={() => table.modal()} icon={<UserAddOutlined />}  />
+                        </Form.Item>
                         </Space>
                       </Row>
                     </Col>
@@ -130,28 +115,65 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
               }
             }}
             form = {{
-              title: '诊疗项目',
-              action: '/admin/organizations',
-              loader: '/admin/organizations/:id',
+              title: '账号信息',
+              action: '/admin/users',
+              loader: '/admin/users/:id',
               name: 'user-form',
               initialValues: {
-                type: 'treatment_item',
+                mode: 0
               },
               onLoaded: async (values: any) => ({...values, password: Date.now()}),
               children: (values) => (
                 <>
                   <Form.Item
-                    label='项目名称'
+                    label='账号名称'
                     labelCol={{span: 5}}
-                    name={['name']}
-                    rules={[{ required: true, message: '请输入诊疗项目名称' }]}
+                    name={['username']}
+                    rules={[{ required: true, message: '请输入登录账号' }]}
                   >
-                    <Input placeholder='请输入诊疗项目名称' />
+                    <Input disabled={!!values.id} placeholder='输入登录账号' />
                   </Form.Item>
                   <Form.Item
-                    label='所属科室'
+                    label='登录密码'
                     labelCol={{span: 5}}
-                    name={['path']}
+                    name={['password']}
+                    rules={[{ required: true, message: '请输入登录密码' }]}
+                  >
+                    <Input.Password disabled={!!values.id} placeholder='入登录密码' />
+                  </Form.Item>
+                  <Form.Item
+                    label='真实姓名'
+                    labelCol={{span: 5}}
+                    name={['name']}
+                  >
+                    <Input placeholder='输入真实姓名（可选）' />
+                  </Form.Item>
+                  <Form.Item
+                    label='联系手机'
+                    labelCol={{span: 5}}
+                    name={['phone']}
+                  >
+                    <Input placeholder='输入联系手机（可选）' />
+                  </Form.Item>
+                  <Form.Item
+                    label='电子邮箱'
+                    labelCol={{span: 5}}
+                    name={['email']}
+                  >
+                    <Input placeholder='输入联系邮箱（可选）' />
+                  </Form.Item>
+                  <Form.Item
+                    label='类型'
+                    labelCol={{span: 5}}
+                    name={['group']}
+                    rules={[{ required: true, message: '请选择' }]}
+                  >
+                    <Radio.Group options={HospitalGroupOptions.map(item => ({label: item.name, value: item.id}))} />
+                  </Form.Item>
+                  <Form.Item
+                    label='医院科室'
+                    labelCol={{span: 5}}
+                    name={['organization_paths']}
                     rules={[{ required: true, message: '请选择' }]}
                   >
                     <APICascader 

@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2022-05-26 13:54:33
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-11 13:57:43
+ * @LastEditTime: 2023-04-17 10:05:07
  * @Description: 
  * @Developer: 
  */
@@ -15,6 +15,7 @@ import AdminHospitalListPage from './pages/admin/HospitalListPage'
 import AdminDepartmentListPage from './pages/admin/DepartmentListPage'
 import AdminQuestionListPage from './pages/admin/QuestionListPage'
 import AdminQuestionFormPage from './pages/admin/QuestionFormPage'
+import AdminHospotalUserListPage from './pages/admin/HospotalUserListPage'
 
 export default [
   {
@@ -80,6 +81,13 @@ export default [
         isExact: true,
         meta: {
           title: '新增问题'
+        }
+      },{
+        path: "doctors",
+        component: AdminHospotalUserListPage,
+        isExact: true,
+        meta: {
+          title: '医护人员'
         }
       }
     ]
