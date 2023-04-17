@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2022-05-28 15:26:23
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-06 14:22:50
+ * @LastEditTime: 2023-04-17 16:23:31
  * @Description: 
  * @Developer: 
  */
@@ -76,13 +76,13 @@ export default forwardRef((props: APIFormProps<any>, formRef: any) => {
       .catch((error) => failed(method, error, values))
   })
   
-  const options = { ...props, onFinish }
-  delete (options as any).idProp
-  delete (options as any).action
-  delete (options as any).onBeforeRequest
-  delete (options as any).onRequestSucceeded
-  delete (options as any).onRequestFailed
-  delete (options as any).onLoaded
+  const attributes = { ...props, onFinish }
+  delete (attributes as any).idProp
+  delete (attributes as any).action
+  delete (attributes as any).onBeforeRequest
+  delete (attributes as any).onRequestSucceeded
+  delete (attributes as any).onRequestFailed
+  delete (attributes as any).onLoaded
   
-  return <Form ref={formRef} { ...options as any } />
+  return <Form ref={formRef} { ...attributes as any } />
 })

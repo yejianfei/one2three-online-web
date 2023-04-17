@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-03 22:34:45
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-06 13:35:00
+ * @LastEditTime: 2023-04-17 16:21:28
  * @Description: 
  * @Developer: 
  */
@@ -12,7 +12,7 @@ import { Button, Card, Col, Form, Input, Row, Space, Radio } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import APITable from '../../components/antd/APITable'
 import WithRouter, { WithRouteAttributeProps } from '../../components/WithRouter'
-import APICascader from '../../components/antd/APICascader'
+import APITreeSelect from '../../components/antd/APITreeSelect'
 
 import { HospitalGroupOptions, HospitalGroupFilter } from '../../options'
 
@@ -39,7 +39,7 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
           <APITable
             bordered
             tableLayout='fixed'
-            load={`/admin/users/list/:page`}
+            loader={`/admin/users/list/:page`}
             initialParams={{
               page: 1,
               size: 25,
@@ -176,7 +176,22 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                     name={['organization_paths']}
                     rules={[{ required: true, message: '请选择' }]}
                   >
-                    <APICascader 
+                    <APITreeSelect 
+                      loader={{
+                        root: '/admin/organizations/tree/:path/children?type=hospital',
+                        children: '/admin/organizations/tree/:path/children',
+                      }}
+                      params={{
+                        path: 'root'
+                      }}
+                      multiple
+                      treeCheckable={true}
+                      showSearch={false}
+                      leafSelectableOnly={true}
+                      leafCheckableOnly={true}
+                      depth={2}
+                    />
+                    {/* <APICascader 
                       loader={{
                         root: '/admin/organizations/tree/:path/children?type=hospital',
                         children: '/admin/organizations/tree/:path/children',
@@ -185,14 +200,17 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                         path: 'root'
                       }}
                       depth={2}
+                      changeOnSelect
                       cascadeParamName='path'
+                      multiple
+                      showCheckedStrategy='SHOW_CHILD'
                       placeholder='选择所属医院及科室'
                       fieldNames={{
                         label: 'name',
                         value: 'id',
                         path: 'full_path'
                       }}
-                    />
+                    /> */}
                   </Form.Item>
                 </>
               )

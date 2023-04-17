@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-03 22:34:45
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-11 15:53:07
+ * @LastEditTime: 2023-04-17 10:59:52
  * @Description: 
  * @Developer: 
  */
@@ -53,6 +53,27 @@ export default class AdminQuestionFormPage extends React.Component<Props & WithR
           style={{height: '100%'}} 
           bodyStyle={{padding: 12, height: 'calc(100% - 39px)', 
           overflow: 'hidden'}}
+          extra={
+            <Space>
+              <Button 
+                danger 
+                size='small' 
+                type='link' 
+                onClick={() => {
+
+                }} 
+                children={'重置'} 
+              />
+              <Button 
+                size='small' 
+                type='link' 
+                onClick={() => {
+
+                }} 
+                children={'提交'} 
+              />
+            </Space>
+          }
         >
           <APITable
             data={this.state.items}
@@ -68,7 +89,12 @@ export default class AdminQuestionFormPage extends React.Component<Props & WithR
               dataIndex: 'title',
               render: ((text: string, record: any, index: number, instance: any) => {
                 return (
-                  <Input />
+                  <Input value={record.title} onChange={(event) => {
+                    const items = [...this.state.items]
+                    items[index].title = event.target.value
+
+                    this.setState({items})
+                  }}/>
                 )
               }) as any
             },{
@@ -78,7 +104,12 @@ export default class AdminQuestionFormPage extends React.Component<Props & WithR
               dataIndex: 'options',
               render: ((text: string, record: any, index: number, instance: any) => {
                 return (
-                  <InputTags value={['a', 'b']} />
+                  <InputTags value={record.options} onChange={(value) => {
+                    const items = [...this.state.items]
+                    items[index].options = value
+
+                    this.setState({items})
+                  }} />
                 )
               }) as any
             },{
@@ -88,7 +119,15 @@ export default class AdminQuestionFormPage extends React.Component<Props & WithR
               width: 200,
               render: ((text: string, record: any, index: number, instance: any) => {
                 return (
-                  <Button danger size='small' type="link">删除</Button>
+                  <Button 
+                    danger 
+                    size='small' 
+                    type='link' 
+                    onClick={() => {
+
+                    }} 
+                    children={'删除'} 
+                  />
                 )
               }) as any
             }]}

@@ -2,14 +2,15 @@
  * @Author: yejianfei
  * @Date: 2023-04-06 12:12:19
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-06 15:45:45
+ * @LastEditTime: 2023-04-17 14:35:08
  * @Description: 
  * @Developer: 
  */
-import React, { forwardRef, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Cascader, CascaderProps } from 'antd'
 
 import Api from '../../api'
+import { isArray } from 'lodash'
 
 const api = Api()
 
@@ -25,11 +26,21 @@ type APICascaderProps<DataNodeType = any> = {
     leaf?: string
     path?: string
   }
-  value?: string
+  value?: string | string[]
   onChange?: (value: string, selections: any[]) => void
 } & CascaderProps<DataNodeType> 
 
 export default function APICascader(props: APICascaderProps) {
+
+  const getValue = () => {
+    return props.multiple
+      ? (props.value && isArray(props.value) ? (props.value as string[]).reduce((previous: string[][], current:string) => {
+        previous.push(current.split('/'))
+        return previous
+      }, []) : undefined)
+      : (props.value && typeof(props.value) === 'string' ? props.value.split('/') : undefined)
+  }
+
   const [options, setOptions] = useState<any[] | undefined>(props.options)
   const loadData = props.loader
     ? (selections: any[]) => {
@@ -60,15 +71,18 @@ export default function APICascader(props: APICascaderProps) {
     : props.loadData
 
   useEffect(() => {
+    
     if (props.loader) {
       const url = typeof(props.loader) === 'string'
         ? props.loader : props.loader.root
       api.get<any[]>(url, {params: props.params})
         .then((data) => {
+          console.log('loader', props.value)
           setOptions(data.map((item) => {
               const option = {
                 ...item,
-                isLeaf: item[props.fieldNames?.leaf || 'leaf']
+                isLeaf: item[props.fieldNames?.leaf || 'leaf'],
+                checkable: false
               }
 
               option[props.fieldNames.children || 'children'] = []
@@ -78,16 +92,33 @@ export default function APICascader(props: APICascaderProps) {
     }
   }, [])
 
-  const value = props.value && props.value.split('/')
+  useEffect(() => {
+  }, [props.value, options])
+  
   const _props = {...props}
   delete (_props as any).cascadeParamName
   return (<Cascader
     {..._props} 
     loadData={loadData} 
     options={options}
-    value={value}
-    onChange={(value: any[], selections: any[]) => {
-      props.onChange && props.onChange(value.join('/'), selections)
+    value={getValue()}
+    displayRender={props.displayRender || (props.multiple ? (labels: string[], selectedOptions: any) => {
+
+      return  labels.map((label, i) => {
+        return <span key={i}>{label} {i < labels.length - 1 ? '/' : ''} </span>
+      })
+    } : undefined)}
+    onChange={(value: any, selections: any[]) => {
+      if (props.onChange) {
+        const items: any = props.multiple
+          ? value.reduce((previous: string[] ,current: string[]) => {
+            previous.push(current.join('/'))
+            return previous
+          }, [])
+          : value.join('/')
+        
+        props.onChange(items, selections)
+      }
     }}
   />)
 }
