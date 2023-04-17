@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2022-05-28 18:22:45
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-06 12:57:08
+ * @LastEditTime: 2023-04-11 15:00:08
  * @Description: 
  * @Developer: 
  */
@@ -18,7 +18,7 @@ const api = Api()
 type Params = {page?: number, size?: number} & {[key:string]: boolean | string | number | Date | string[] | number[] | Date[]}
 
 type Props<RecordType extends object = any, FormValues extends object = any > = {
-  load?: string
+  loader?: string
   initialParams?: Params
   params?: Params,
   data?: any,
@@ -55,7 +55,7 @@ export default function APITable<RecordType extends object = any>(props: Props<R
   }
 
   useEffect(() => {
-    props.load && load(props.load, params)
+    props.loader && load(props.loader, params)
     setPage(1)
   }, [props.params])
 
@@ -64,7 +64,7 @@ export default function APITable<RecordType extends object = any>(props: Props<R
   }, [props.modal])
 
 
-  const pagination = {
+  const pagination = props.pagination && {
     ...(props.pagination || {}),
     defaultCurrent: params.page || 1,
     defaultPageSize: params.size || 10,
@@ -72,7 +72,7 @@ export default function APITable<RecordType extends object = any>(props: Props<R
     current: pageIndex,
     onChange: (page: number, size: number) => {
       setPage(page)
-      props.load && load(props.load, {...params, page, size})
+      props.loader && load(props.loader, {...params, page, size})
     }
   }
 
@@ -84,8 +84,8 @@ export default function APITable<RecordType extends object = any>(props: Props<R
 
     search() {
       setTimeout(() => {
-        props.load 
-          && load(props.load, {...(props.initialParams || {}), ...(searchForm.current?.getFieldsValue() || {})})
+        props.loader 
+          && load(props.loader, {...(props.initialParams || {}), ...(searchForm.current?.getFieldsValue() || {})})
       })
     }
   }
@@ -114,7 +114,7 @@ export default function APITable<RecordType extends object = any>(props: Props<R
         {...props}
         columns={columns}
         loading={loading}
-        dataSource={props.load ? data : props.data} 
+        dataSource={props.loader ? data : props.data} 
         pagination={pagination}
       />
       {props.form && (
@@ -124,10 +124,10 @@ export default function APITable<RecordType extends object = any>(props: Props<R
             ...props.form,
             value: selected,
             onRequestSucceeded: (method, res, values) => {
-              if (props.load) {
+              if (props.loader) {
                 method === 'post'
-                  ? load(props.load, props.initialParams || {})
-                  : load(props.load, params)
+                  ? load(props.loader, props.initialParams || {})
+                  : load(props.loader, params)
               }
               props.form?.onRequestSucceeded &&  props.form?.onRequestSucceeded(method, res, values)
             }

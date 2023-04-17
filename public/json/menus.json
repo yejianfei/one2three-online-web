@@ -26,6 +26,11 @@
     "icon": "icon-questionnaires",
     "path": "/admin/questionnaires"
   },{
+    "key": "questions",
+    "label": "问题管理",
+    "icon": "icon-questions",
+    "path": "/admin/questions"
+  },{
     "key": "doctors",
     "label": "医护人员",
     "icon": "icon-doctor",

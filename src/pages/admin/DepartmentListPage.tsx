@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-03 22:34:45
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-06 16:18:10
+ * @LastEditTime: 2023-04-11 14:15:19
  * @Description: 
  * @Developer: 
  */
@@ -43,7 +43,7 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
           <APITable
             bordered
             tableLayout='fixed'
-            load={`/admin/organizations/list/:page?type=department`}
+            loader={`/admin/organizations/list/:page?type=department`}
             initialParams={{
               page: 1,
               size: 25,

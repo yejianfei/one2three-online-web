@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-03 22:34:45
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-11 14:14:58
+ * @LastEditTime: 2023-04-11 14:16:53
  * @Description: 
  * @Developer: 
  */
@@ -12,6 +12,7 @@ import { Button, Card, Col, Form, Input, Row, Space } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import APITable from '../../components/antd/APITable'
 import WithRouter, { WithRouteAttributeProps } from '../../components/WithRouter'
+import IconFont from '../../icons'
 
 type Props = {
 
@@ -25,7 +26,7 @@ type State = {
 }
 
 @WithRouter()
-export default class AdminUserListPage extends React.Component<Props & WithRouteAttributeProps<RouteParams>, State> {
+export default class AdminQuestionListPage extends React.Component<Props & WithRouteAttributeProps<RouteParams>, State> {
 
   readonly state: Readonly<State> = {}
 
@@ -96,7 +97,7 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                       <Row justify='end'>
                       <Space>
                         <Form.Item>
-                          <Button onClick={() => table.modal()} icon={<UserAddOutlined />}  />
+                          <Button onClick={() => this.props.route.navigate('form')} icon={<IconFont type='icon-questions-add' />}  />
                         </Form.Item>
                         </Space>
                       </Row>
@@ -105,58 +106,7 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                 )
               }
             }}
-            form = {{
-              title: '账号信息',
-              action: '/admin/users',
-              loader: '/admin/users/:id',
-              name: 'user-form',
-              initialValues: {
-                group: 'cn.com.one2three.admin', 
-                mode: 0
-              },
-              onLoaded: async (values: any) => ({...values, password: Date.now()}),
-              children: (values) => (
-                <>
-                  <Form.Item
-                    label='账号名称'
-                    labelCol={{span: 5}}
-                    name={['username']}
-                    rules={[{ required: true, message: '请输入登录账号' }]}
-                  >
-                    <Input disabled={!!values.id} placeholder='输入登录账号' />
-                  </Form.Item>
-                  <Form.Item
-                    label='登录密码'
-                    labelCol={{span: 5}}
-                    name={['password']}
-                    rules={[{ required: true, message: '请输入登录密码' }]}
-                  >
-                    <Input.Password disabled={!!values.id} placeholder='入登录密码' />
-                  </Form.Item>
-                  <Form.Item
-                    label='真实姓名'
-                    labelCol={{span: 5}}
-                    name={['name']}
-                  >
-                    <Input placeholder='输入真实姓名（可选）' />
-                  </Form.Item>
-                  <Form.Item
-                    label='联系手机'
-                    labelCol={{span: 5}}
-                    name={['phone']}
-                  >
-                    <Input placeholder='输入联系手机（可选）' />
-                  </Form.Item>
-                  <Form.Item
-                    label='电子邮箱'
-                    labelCol={{span: 5}}
-                    name={['email']}
-                  >
-                    <Input placeholder='输入联系邮箱（可选）' />
-                  </Form.Item>
-                </>
-              )
-            }}
+          
           >
           </APITable>
         </Card>

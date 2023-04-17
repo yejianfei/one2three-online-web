@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2022-05-26 13:54:33
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-06 12:09:21
+ * @LastEditTime: 2023-04-11 13:57:43
  * @Description: 
  * @Developer: 
  */
@@ -13,6 +13,8 @@ import AdminUserLIstPage from './pages/admin/UserListPage'
 import AdminDiagnosticListPage from './pages/admin/DiagnosticListPage'
 import AdminHospitalListPage from './pages/admin/HospitalListPage'
 import AdminDepartmentListPage from './pages/admin/DepartmentListPage'
+import AdminQuestionListPage from './pages/admin/QuestionListPage'
+import AdminQuestionFormPage from './pages/admin/QuestionFormPage'
 
 export default [
   {
@@ -64,6 +66,20 @@ export default [
         isExact: true,
         meta: {
           title: '科室管理'
+        }
+      }, {
+        path: "questions",
+        component: AdminQuestionListPage,
+        isExact: true,
+        meta: {
+          title: '问卷管理'
+        }
+      }, {
+        path: "questions/form",
+        component: AdminQuestionFormPage,
+        isExact: true,
+        meta: {
+          title: '新增问题'
         }
       }
     ]

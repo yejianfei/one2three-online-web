@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-03 22:42:35
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-03 23:07:09
+ * @LastEditTime: 2023-04-11 15:09:49
  * @Description: 
  * @Developer: 
  */
@@ -29,6 +29,7 @@ export default function AdminPage(props: AdminPageProps) {
         // padding: 12,
         margin: 0,
         height: '100%',
+        overflow: 'scroll' 
         // background: colorBgContainer,
       }}
     >

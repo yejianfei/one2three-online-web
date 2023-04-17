@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-03 13:55:07
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-03 22:43:42
+ * @LastEditTime: 2023-04-11 15:09:23
  * @Description: 
  * @Developer: 
  */
@@ -56,7 +56,7 @@ export default function AdminPageWrapper(props: Props) {
             )}
           />
         </Sider>
-        <Layout style={{ padding: '0 12px 12px' }}>
+        <Layout style={{ padding: '0 12px 12px'}}>
           <Outlet />
         </Layout>
       </Layout>
