@@ -53,6 +53,15 @@ export default function APITable<RecordType extends object = any>(props: Props<R
         setLoading(false)
       })
   }
+  const remove = (url: string, id?: string[]) => {
+    setLoading(true)
+    api.delete(url, { data: id })
+      .then((res) => {
+        if (props.loader) {
+          load(props.loader, params)
+        }
+      })
+  }
 
   useEffect(() => {
     props.loader && load(props.loader, params)
@@ -81,7 +90,11 @@ export default function APITable<RecordType extends object = any>(props: Props<R
       setModalOpened(true)
       setSelected(value)
     },
-
+    delete: (value?: string) => {
+      if (props.form && props.form.action && value) {
+        remove(props.form.action, [value])
+      }
+    },
     search() {
       setTimeout(() => {
         props.loader 

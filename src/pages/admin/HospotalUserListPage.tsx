@@ -87,7 +87,7 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                 return (
                   <Space>
                     <Button type="link" onClick={() => instance.modal(record.id)}>编辑</Button>
-                    <Button danger type="link">删除</Button>
+                    <Button danger type="link" onClick={() => instance.delete(record.id)}>删除</Button>
                   </Space>
                 )
               }) as any

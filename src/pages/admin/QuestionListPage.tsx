@@ -11,6 +11,7 @@ import AdminPage from '../../components/antd/AdminPage'
 import { Button, Card, Col, Form, Input, Row, Space } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import APITable from '../../components/antd/APITable'
+import InputTags from '../../components/antd/APITags'
 import WithRouter, { WithRouteAttributeProps } from '../../components/WithRouter'
 import IconFont from '../../icons'
 
@@ -37,11 +38,10 @@ export default class AdminQuestionListPage extends React.Component<Props & WithR
           <APITable
             bordered
             tableLayout='fixed'
-            loader={`/admin/users/list/:page`}
+            loader={`/admin/questions/list/:page`}
             initialParams={{
               page: 1,
               size: 25,
-              group: 'cn.com.one2three.admin',
               filters: true
             }}
 
@@ -51,25 +51,16 @@ export default class AdminQuestionListPage extends React.Component<Props & WithR
             pagination={{showSizeChanger: false}}
  
             columns={[{
-              title: '账号名称',
+              title: '问题',
               width: 200,
               align: 'center',
-              dataIndex: 'username'
+              dataIndex: 'title'
             },{
-              title: '真实姓名',
+              title: '选项',
               width: 200,
               align: 'center',
-              dataIndex: 'name'
-            },{
-              title: '手机号码',
-              width: 200,
-              align: 'center',
-              dataIndex: 'phone'
-            },{
-              title: '电子邮箱',
-              width: 200,
-              align: 'center',
-              dataIndex: 'email'
+              dataIndex: 'options',
+              render: (value: string[]) => value?.join(',') || ''
             },{
               title: '操作',
               dataIndex: 'operation',
@@ -79,7 +70,7 @@ export default class AdminQuestionListPage extends React.Component<Props & WithR
                 return (
                   <Space>
                     <Button type="link" onClick={() => instance.modal(record.id)}>编辑</Button>
-                    <Button danger type="link">删除</Button>
+                    <Button danger type="link" onClick={() => instance.delete(record.id)}>删除</Button>
                   </Space>
                 )
               }) as any
@@ -90,7 +81,7 @@ export default class AdminQuestionListPage extends React.Component<Props & WithR
                   <Row>
                     <Col span={8}>
                       <Form.Item name={['keywords']}>
-                        <Input.Search placeholder='输入账号名称检索' allowClear enterButton onSearch={() => table.search()} />
+                        <Input.Search placeholder='输入问题检索' allowClear enterButton onSearch={() => table.search()} />
                       </Form.Item>
                     </Col>
                     <Col flex={1}>
@@ -106,7 +97,36 @@ export default class AdminQuestionListPage extends React.Component<Props & WithR
                 )
               }
             }}
-          
+            form = {{
+              title: '问题',
+              action: '/admin/questions',
+              loader: '/admin/questions/:id',
+              name: 'question-form',
+              initialValues: {
+                options: []
+              },
+              onLoaded: async (values: any) => ({...values, password: Date.now()}),
+              children: (values) => (
+                <>
+                  <Form.Item
+                    label='问题'
+                    labelCol={{span: 5}}
+                    name={['title']}
+                    rules={[{ required: true, message: '请输入问题' }]}
+                  >
+                    <Input placeholder='请输入问题' />
+                  </Form.Item>
+                  <Form.Item
+                    label='选项'
+                    labelCol={{span: 5}}
+                    name={['options']}
+                    rules={[{ required: true, message: '请输入选项' }]}
+                  >
+                    <InputTags />
+                  </Form.Item>
+                </>
+              )
+            }}
           >
           </APITable>
         </Card>
