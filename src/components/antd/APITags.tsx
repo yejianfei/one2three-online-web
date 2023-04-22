@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-11 15:42:35
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-17 10:44:52
+ * @LastEditTime: 2023-04-22 15:40:01
  * @Description: 
  * @Developer: 
  */
@@ -27,6 +27,8 @@ export default function InputTags(props: InputTagProps) {
 
   useEffect(() => inputRef.current?.focus(), [adding])
   useEffect(() => editRef.current?.focus(), [editing])
+
+  console.log('props', props.value, editing, adding)
 
   return (
     <>
@@ -57,7 +59,9 @@ export default function InputTags(props: InputTagProps) {
               key={index} 
               closable
               children={item}
+              style={{display: 'inline-block'}}
               onClose={() => {
+                console.log((props.value || []).filter((value) => value !== item))
                 props.onChange && props.onChange((props.value || []).filter((value) => value !== item))
               }}
               onDoubleClick={() => {

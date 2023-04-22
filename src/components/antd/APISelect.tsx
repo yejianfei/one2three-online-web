@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-06 12:12:19
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-06 15:45:45
+ * @LastEditTime: 2023-04-22 15:19:17
  * @Description: 
  * @Developer: 
  */
@@ -13,10 +13,10 @@ import Api from '../../api'
 
 const api = Api()
 
-type APISelectProps = {
-  stringify?: boolean
-  loader?: string | {id: string, name: string}[]
+export type APISelectProps = {
+  loader?: string
   params?: {[key: string]: any}
+  searchParamName?: string
 } & SelectProps<any, any>
 
 export default function APISelect(props: APISelectProps) {
@@ -24,18 +24,26 @@ export default function APISelect(props: APISelectProps) {
 
   useEffect(() => {
     if (props.loader) {
-      typeof(props.loader) === 'string' ? 
       api.get<any[]>(props.loader, {params: props.params})
-      .then((data) => {
-        setOptions(data)
-      }) : {}
+        .then((data) => setOptions(data))
     }
   }, [])
-  
-  const allOptions = {...props, value: props.value, onChange: props.onChange, options: props.loader ? options : props.options}
 
-  delete (allOptions as any).stringify
+  const onSearch = (value: string) => {
+    if (props.loader && props.searchParamName) {
+      const params = {...(props.params || {})} 
+      params[props.searchParamName] = value
+      api.get<any[]>(props.loader, {params})
+        .then((data) => setOptions(data))
+    } else {
+      props.onSearch && props.onSearch(value)
+    }
+  }
+
+  const attributes = { ...props, onSearch, options }
+  delete (attributes as any).searchParamName
+
   return (
-    <Select { ...allOptions } />
+    <Select {...attributes} filterOption={props.filterOption || !props.showSearch} />
   )
 }

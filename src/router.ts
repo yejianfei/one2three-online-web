@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2022-05-26 13:54:33
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-17 10:05:07
+ * @LastEditTime: 2023-04-19 22:58:09
  * @Description: 
  * @Developer: 
  */
@@ -13,6 +13,8 @@ import AdminUserLIstPage from './pages/admin/UserListPage'
 import AdminDiagnosticListPage from './pages/admin/DiagnosticListPage'
 import AdminHospitalListPage from './pages/admin/HospitalListPage'
 import AdminDepartmentListPage from './pages/admin/DepartmentListPage'
+import AdminQuestionnaireListPage from './pages/admin/QuestionnaireListPage'
+import AdminQuestionnaireFormPage from './pages/admin/QuestionnaireFormPage'
 import AdminQuestionListPage from './pages/admin/QuestionListPage'
 import AdminQuestionFormPage from './pages/admin/QuestionFormPage'
 import AdminHospotalUserListPage from './pages/admin/HospotalUserListPage'
@@ -69,18 +71,32 @@ export default [
           title: '科室管理'
         }
       }, {
+        path: "questionnaires",
+        component: AdminQuestionnaireListPage,
+        isExact: true,
+        meta: {
+          title: '问卷管理'
+        }
+      }, {
+        path: "questionnaires/form",
+        component: AdminQuestionnaireFormPage,
+        isExact: true,
+        meta: {
+          title: '问卷资料'
+        }
+      },, {
         path: "questions",
         component: AdminQuestionListPage,
         isExact: true,
         meta: {
-          title: '问卷管理'
+          title: '问题管理'
         }
       }, {
         path: "questions/form",
         component: AdminQuestionFormPage,
         isExact: true,
         meta: {
-          title: '新增问题'
+          title: '问题列表'
         }
       },{
         path: "doctors",
