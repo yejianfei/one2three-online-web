@@ -191,26 +191,6 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                       leafCheckableOnly={true}
                       depth={2}
                     />
-                    {/* <APICascader 
-                      loader={{
-                        root: '/admin/organizations/tree/:path/children?type=hospital',
-                        children: '/admin/organizations/tree/:path/children',
-                      }}
-                      params={{
-                        path: 'root'
-                      }}
-                      depth={2}
-                      changeOnSelect
-                      cascadeParamName='path'
-                      multiple
-                      showCheckedStrategy='SHOW_CHILD'
-                      placeholder='选择所属医院及科室'
-                      fieldNames={{
-                        label: 'name',
-                        value: 'id',
-                        path: 'full_path'
-                      }}
-                    /> */}
                   </Form.Item>
                 </>
               )
