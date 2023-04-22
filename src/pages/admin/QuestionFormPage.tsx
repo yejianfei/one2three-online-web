@@ -8,12 +8,12 @@
  */
 import React from 'react'
 import AdminPage from '../../components/antd/AdminPage'
-import { Button, Card, Col, Form, Input, Row, Space } from 'antd'
-import { UserAddOutlined } from '@ant-design/icons'
+import { Button, Card, Input, Space } from 'antd'
 import APITable from '../../components/antd/APITable'
 import WithRouter, { WithRouteAttributeProps } from '../../components/WithRouter'
-import View from '../../components/View'
 import InputTags from '../../components/antd/APITags'
+
+import Api, { GenericHttpInstance } from '../../api'
 
 type Question = {
   id: string
@@ -36,12 +36,50 @@ type State = {
 @WithRouter()
 export default class AdminQuestionFormPage extends React.Component<Props & WithRouteAttributeProps<RouteParams>, State> {
 
+  api: GenericHttpInstance = Api()
+
   readonly state: Readonly<State> = {
-    items: new Array(10).fill({}).map((item, index) => ({
+    items: []
+  }
+
+  componentDidMount() {
+    this.init()
+  }
+
+  init() {
+    this.setState({items: new Array(1).fill({}).map((item, index) => ({
       id: `${index}`,
       title: '',
       options: []
-    }))
+    }))})
+  }
+
+  reset(items: Question[]) {
+    console.log('items', items)
+
+    let index: number = items.findIndex(item => !item.title && item.options.length === 0)
+    if (index !== -1) {
+      this.setState({items})
+      return
+    }
+
+    items.push({
+      id: `${items.length}`,
+      title: '',
+      options: []
+    })
+
+    this.setState({items})
+  }
+
+  submit() {
+    this.api.post('/admin/questions/batch', {
+      questions: this.state.items
+    }).then(res => {
+      this.props.route.navigate(-1)
+    }).catch(err => {
+      console.log('err', err)
+    })
   }
 
   render(): React.ReactNode {
@@ -56,20 +94,16 @@ export default class AdminQuestionFormPage extends React.Component<Props & WithR
           extra={
             <Space>
               <Button 
-                danger 
+                danger
                 size='small' 
                 type='link' 
-                onClick={() => {
-
-                }} 
-                children={'重置'} 
+                onClick={() => this.props.route.navigate(-1)} 
+                children={'返回'} 
               />
               <Button 
-                size='small' 
-                type='link' 
-                onClick={() => {
-
-                }} 
+                size='small'
+                type='link'
+                onClick={() => this.submit()} 
                 children={'提交'} 
               />
             </Space>
@@ -93,7 +127,7 @@ export default class AdminQuestionFormPage extends React.Component<Props & WithR
                     const items = [...this.state.items]
                     items[index].title = event.target.value
 
-                    this.setState({items})
+                    this.reset(items)
                   }}/>
                 )
               }) as any
@@ -108,7 +142,7 @@ export default class AdminQuestionFormPage extends React.Component<Props & WithR
                     const items = [...this.state.items]
                     items[index].options = value
 
-                    this.setState({items})
+                    this.reset(items)
                   }} />
                 )
               }) as any
@@ -124,7 +158,10 @@ export default class AdminQuestionFormPage extends React.Component<Props & WithR
                     size='small' 
                     type='link' 
                     onClick={() => {
+                      const items = [...this.state.items]
+                      items?.splice(index, 1)
 
+                      this.reset(items)
                     }} 
                     children={'删除'} 
                   />

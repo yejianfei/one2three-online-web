@@ -81,7 +81,7 @@ export default function InputTags(props: InputTagProps) {
             onChange={(value) => setNewValue(value.target.value)}
             onBlur={() => {
               setAdding(false)
-              props.onChange && props.onChange([...(props.value || []), newValue])
+              newValue && props.onChange && props.onChange([...(props.value || []), newValue])
             }}
           />
         : (
