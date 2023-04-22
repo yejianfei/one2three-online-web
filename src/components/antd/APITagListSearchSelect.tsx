@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-19 23:29:13
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-22 16:32:42
+ * @LastEditTime: 2023-04-22 22:20:29
  * @Description: 
  * @Developer: 
  */
@@ -22,17 +22,21 @@ const api = Api()
 export type APITagListSearchSelect = {
   loader?: string
   value?: string[]
-  tags?: string | any[]
+  tags?: any[]
   tagFieldNames?: {id?: string, text?: string}
   searchParamName: string
   onChange?: (value: string[]) => void
 }
 
 
+
 export default function APITagListSearchSelect(props: APITagListSearchSelect) {
   const [tags, setTags] = useState<any[]>([])
   const [selected, setSelected] = useState('')
   const [options, setOptions] = useState<any[]>([])
+
+  const getTagValue = (item: any) => item[props.tagFieldNames ? (props.tagFieldNames.id || 'id') : 'id']
+  const getTagText = (item: any) => item[props.tagFieldNames ? (props.tagFieldNames.text || 'text') : 'text']
 
   useEffect(() => {
     typeof(props.tags) === 'string'
@@ -58,11 +62,13 @@ export default function APITagListSearchSelect(props: APITagListSearchSelect) {
             params[props.searchParamName] = value
             
             api.get<any[]>(props.loader, {params})
-              .then((data) => setOptions(data))
+              .then((data) => {
+                setOptions(data.filter((item) =>  getTagValue(item) !== value))
+              })
           }
         }}
         onChange={(value) => {
-          const tag = options.find((item) => item[props.tagFieldNames ? (props.tagFieldNames.id || 'id') : 'id'] === value)
+          const tag = options.find((item) => getTagValue(item) === value)
           if (tag) {
             setTags([tag, ...tags])
           }
@@ -76,18 +82,23 @@ export default function APITagListSearchSelect(props: APITagListSearchSelect) {
       <List 
         size='small' 
         split={false} 
-        dataSource={props.value && tags.filter((item) => (props.value || []).includes(item[props.tagFieldNames ? (props.tagFieldNames.id || 'id') : 'id']))}
-        renderItem={(item) => (
-          <List.Item>
-            <Tag closable onClose={() => {
-              props.onChange && props.onChange((props.value || []).filter((value) => {
-                return item[props.tagFieldNames ? (props.tagFieldNames.id || 'id') : 'id'] !== value
-              }))
-            }}>
-              <Text style={{width: '100%'}}>{item[props.tagFieldNames ? (props.tagFieldNames.text || 'text') : 'text']}</Text>
-            </Tag>
-          </List.Item>
-        )}
+        dataSource={props.value || []}
+        renderItem={(val) => {
+          const item = (tags || []).find((item) => getTagValue(item) === val)
+          return item 
+          ? (
+            <List.Item>
+              <Tag closable onClose={() => {
+                props.onChange && props
+                      .onChange((props.value || [])
+                      .filter((value) => getTagValue(item) !== value))
+              }}>
+                <Text style={{width: '100%'}}>{getTagText(item)}</Text>
+              </Tag>
+            </List.Item>
+          )
+          : (<></>)
+        }}
       >
       </List>
     </View>
