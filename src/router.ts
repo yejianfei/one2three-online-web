@@ -78,13 +78,20 @@ export default [
           title: '问卷管理'
         }
       }, {
-        path: "questionnaires/form",
+        path: "questionnaires/form/",
         component: AdminQuestionnaireFormPage,
         isExact: true,
         meta: {
           title: '问卷资料'
         }
-      },, {
+      }, {
+        path: "questionnaires/form/:id",
+        component: AdminQuestionnaireFormPage,
+        isExact: true,
+        meta: {
+          title: '问卷资料'
+        }
+      }, {
         path: "questions",
         component: AdminQuestionListPage,
         isExact: true,

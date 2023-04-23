@@ -11,7 +11,7 @@ import { App, AppProps } from 'antd'
 import { NavigateFunction, Params, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAppProps } from 'antd/es/app/context'
 
-type RouteAttribute<P extends Params<string>> = {
+export type RouteAttribute<P extends Params<string>> = {
   navigate: NavigateFunction
   params: Readonly<P>
   searchParams: URLSearchParams

@@ -37,11 +37,10 @@ export default class AdminQuestionnaireListPage extends React.Component<Props & 
           <APITable
             bordered
             tableLayout='fixed'
-            loader={`/admin/users/list/:page`}
+            loader={`/admin/questionnaires/list/:page`}
             initialParams={{
               page: 1,
               size: 25,
-              group: 'cn.com.one2three.admin',
               filters: true
             }}
 
@@ -51,25 +50,25 @@ export default class AdminQuestionnaireListPage extends React.Component<Props & 
             pagination={{showSizeChanger: false}}
  
             columns={[{
-              title: '账号名称',
+              title: '问券标题',
               width: 200,
               align: 'center',
-              dataIndex: 'username'
+              dataIndex: 'title'
             },{
-              title: '真实姓名',
+              title: '所属医院',
               width: 200,
               align: 'center',
-              dataIndex: 'name'
+              dataIndex: 'hospital'
             },{
-              title: '手机号码',
+              title: '所属科室',
               width: 200,
               align: 'center',
-              dataIndex: 'phone'
+              dataIndex: 'department'
             },{
-              title: '电子邮箱',
+              title: '诊疗项目',
               width: 200,
               align: 'center',
-              dataIndex: 'email'
+              dataIndex: 'treatment_item'
             },{
               title: '操作',
               dataIndex: 'operation',
@@ -78,8 +77,8 @@ export default class AdminQuestionnaireListPage extends React.Component<Props & 
               render: ((text: string, record: any, index: number, instance: any) => {
                 return (
                   <Space>
-                    <Button type="link" onClick={() => instance.modal(record.id)}>编辑</Button>
-                    <Button danger type="link">删除</Button>
+                    <Button type="link" onClick={() => this.props.route.navigate(`form/${record.id}`)}>编辑</Button>
+                    <Button danger type="link" onClick={() => instance.delete(record.id)}>删除</Button>
                   </Space>
                 )
               }) as any
