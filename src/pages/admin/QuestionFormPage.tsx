@@ -15,12 +15,6 @@ import InputTags from '../../components/antd/APITags'
 
 import Api, { GenericHttpInstance } from '../../api'
 
-type Question = {
-  id: string
-  title: string
-  options: string[]
-}
-
 type Props = {
 
 }
