@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react'
 import { Cascader, CascaderProps } from 'antd'
 
 import Api from '../../api'
-import { isArray } from 'lodash'
+import { filter, forIn, isArray } from 'lodash'
 
 const api = Api()
 
@@ -41,6 +41,19 @@ export default function APICascader(props: APICascaderProps) {
       : (props.value && typeof(props.value) === 'string' ? props.value.split('/') : undefined)
   }
 
+  const indexOf = (value: string, search: string, index: number) => {
+    let idx = value.indexOf(search)
+    if (index === 1) {
+        return idx;
+    }
+
+    for (let i = 1; i < index; i += 1) {
+      idx = value.indexOf(search, idx + 1);
+    }
+
+    return idx;
+  }
+
   const [options, setOptions] = useState<any[] | undefined>(props.options)
   const loadData = props.loader
     ? (selections: any[]) => {
@@ -58,7 +71,7 @@ export default function APICascader(props: APICascaderProps) {
             option.loading = false
             option[props.fieldNames.children || 'children'] = data.map((item) => ({
               ...item,
-              isLeaf: props.depth && props.depth === selections.length - 1 
+              isLeaf: props.depth && props.depth - 1 !== selections.length 
                 ? item[props.fieldNames?.leaf || 'leaf']
                 : true
             }))
@@ -77,7 +90,6 @@ export default function APICascader(props: APICascaderProps) {
         ? props.loader : props.loader.root
       api.get<any[]>(url, {params: props.params})
         .then((data) => {
-          console.log('loader', props.value)
           setOptions(data.map((item) => {
               const option = {
                 ...item,
@@ -93,7 +105,50 @@ export default function APICascader(props: APICascaderProps) {
   }, [])
 
   useEffect(() => {
-  }, [props.value, options])
+    if (options && props.value && props.loader) {
+      const url = typeof(props.loader) === 'string' ? props.loader : props.loader.children
+
+      const value = typeof(props.value) === 'string' ? props.value : ''
+
+      const paths = new Array(props.depth || 0).fill({})
+        .filter((item: any, index: number) => index + 1 != props.depth)
+        .map((item: any, index: number) => value.substring(0, indexOf(value, '/', index + 1)))
+
+      Promise
+        .all(paths.map((item) =>
+          api.get<any[]>(url, {
+            params: { ...(props.params || {}), ...{path: item} }
+          })
+        ))
+        .then(([departments, items]) => {
+          const departmentOptions = departments.map(element => {
+
+            element[props.fieldNames.children || 'children'] = items ? items
+              .filter(item => item.parent_id === element.id)
+              .map((item: any, index: number) => ({
+                ...item,
+                isLeaf: props.depth && props.depth !== index
+                  ? item[props.fieldNames?.leaf || 'leaf']
+                  : true
+              })) : []
+
+            return element
+          })
+
+          setOptions(options.map((item) => {
+            const option = {
+              ...item,
+              isLeaf: item[props.fieldNames?.leaf || 'leaf'],
+              checkable: false
+            }
+
+            option[props.fieldNames.children || 'children'] = departmentOptions.filter(department => department.parent_id === item.id)
+            return option
+          }))
+        })
+    }
+
+  }, [props.value])
   
   const _props = {...props}
   delete (_props as any).cascadeParamName

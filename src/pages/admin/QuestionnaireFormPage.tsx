@@ -13,6 +13,7 @@ import WithRouter, { WithRouteAttributeProps, RouteAttribute } from '../../compo
 import { Params } from 'react-router-dom'
 import APIForm from '../../components/antd/APIForm'
 import APITagListSearchSelect from '../../components/antd/APITagListSearchSelect'
+import APICascader from '../../components/antd/APICascader'
 import APISelect from '../../components/antd/APISelect'
 import { useAppProps } from 'antd/es/app/context'
 
@@ -30,7 +31,7 @@ type Questionnaire = {
 
 type Props = {
   id: string
-  questions: string[]
+  questions: Question[]
   form: any
 }
 
@@ -39,29 +40,19 @@ type RouteParams = {
 }
 
 type State = {
-  questions: string[]
+
 }
 
 @WithRouter({
   onBeforeEnter: async (route: RouteAttribute<Params<string>>, app: useAppProps) => {
-    const questions = await api.get<Question[]>(`/admin/questions/${route.params?.id}/list`)
-
     return {
       id: route.params?.id,
-      questions: questions.map((item: Question) => item.title)
     }
   }
 })
 export default class AdminQuestionnaireFormPage extends React.Component<Props & WithRouteAttributeProps<RouteParams>, State> {
 
-  readonly state: Readonly<State> = {
-    questions: this.props.questions
-  }
-
-  componentDidMount() {
-    console.log('this.props.questions', this.props.questions)
-    this.setState({questions: this.props.questions})
-  }
+  readonly state: Readonly<State> = {}
 
   ref: React.RefObject<FormInstance<any>> = React.createRef<FormInstance>()
 
@@ -94,81 +85,36 @@ export default class AdminQuestionnaireFormPage extends React.Component<Props & 
                     <Input placeholder='请输入问券标题' />
                   </Form.Item>
                   <Form.Item
-                    label='所属医院'
+                    label='诊疗项目'
                     wrapperCol={{span: 8}}
-                    name={['hospital_id']}
-                    rules={[{ required: true, message: '请选择医院' }]}
+                    name={['path']}
+                    rules={[{ required: true, message: '请选择诊疗项目' }]}
                   >
-                    <APISelect 
-                      loader={'/admin/organizations/tree/:path/children?type=hospital'}
-                      placeholder="请选择医院"
+                    <APICascader 
+                      loader={{
+                        root: '/admin/organizations/tree/:path/children?type=hospital',
+                        children: '/admin/organizations/tree/:path/children',
+                      }}
                       params={{
                         path: 'root'
                       }}
+                      depth={3}
+                      cascadeParamName='path'
+                      placeholder='选择所属医院、科室、诊疗项目'
                       fieldNames={{
                         label: 'name',
-                        value: 'id'
-                      }}
-                      onChange={(value: string) => {
-                        this.ref.current?.setFieldValue("department_id", '')
-                        this.ref.current?.setFieldValue("treatment_item_id", '')
+                        value: 'id',
+                        path: 'full_path'
                       }}
                     />
                   </Form.Item>
-                  {
-                    values.hospital_id ? (
-                      <Form.Item
-                        label='所属科室'
-                        wrapperCol={{span: 8}}
-                        name={['department_id']}
-                        rules={[{ required: true, message: '请选择科室' }]}
-                      >
-                        <APISelect 
-                          loader={`/admin/organizations/tree/:path/children`}
-                          placeholder="请选择科室"
-                          params={{
-                            path: `${values.hospital_id}`
-                          }}
-                          fieldNames={{
-                            label: 'name',
-                            value: 'id'
-                          }}
-                          onChange={(value: string) => {
-                            this.ref.current?.setFieldValue("treatment_item_id", '')
-                          }}
-                        />
-                      </Form.Item>
-                    ) : undefined
-                  }
-                  {
-                    values.department_id ? (
-                      <Form.Item
-                        label='诊疗项目'
-                        wrapperCol={{span: 8}}
-                        name={['treatment_item_id']}
-                        rules={[{ required: true, message: '请选择诊疗项目' }]}
-                      >
-                        <APISelect 
-                          loader={`/admin/organizations/tree/:path/children`}
-                          placeholder="请选择诊疗项目"
-                          params={{
-                            path: `${values.hospital_id}/${values.department_id}`
-                          }}
-                          fieldNames={{
-                            label: 'name',
-                            value: 'id'
-                          }}
-                        />
-                      </Form.Item>
-                    ) : undefined
-                  }
                   <Form.Item
                     label='问题列表'
                     name={['question_ids']}
                   >
                     <APITagListSearchSelect
                       loader='/admin/questions/typeahead'
-                      tags={this.state.questions}
+                      tags={`/admin/questions/${this.props.id}/list`}
                       searchParamName='keywords'
                       tagFieldNames={{text: 'title'}}
                       onChange={(value) => {

@@ -29,6 +29,13 @@ export default function APISelect(props: APISelectProps) {
     }
   }, [])
 
+  useEffect(() => {
+    if (props.loader) {
+      api.get<any[]>(props.loader, {params: props.params})
+        .then((data) => setOptions(data))
+    }
+  }, [props.params])
+
   const onSearch = (value: string) => {
     if (props.loader && props.searchParamName) {
       const params = {...(props.params || {})} 

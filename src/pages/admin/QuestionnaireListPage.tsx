@@ -58,17 +58,17 @@ export default class AdminQuestionnaireListPage extends React.Component<Props & 
               title: '所属医院',
               width: 200,
               align: 'center',
-              dataIndex: 'hospital'
+              dataIndex: 'hospital_name'
             },{
               title: '所属科室',
               width: 200,
               align: 'center',
-              dataIndex: 'department'
+              dataIndex: 'department_name'
             },{
               title: '诊疗项目',
               width: 200,
               align: 'center',
-              dataIndex: 'treatment_item'
+              dataIndex: 'treatment_item_name'
             },{
               title: '操作',
               dataIndex: 'operation',

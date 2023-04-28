@@ -22,7 +22,7 @@ const api = Api()
 export type APITagListSearchSelect = {
   loader?: string
   value?: string[]
-  tags?: any[]
+  tags?: any[] | string
   tagFieldNames?: {id?: string, text?: string}
   searchParamName: string
   onChange?: (value: string[]) => void

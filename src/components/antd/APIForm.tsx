@@ -49,7 +49,7 @@ export default forwardRef((props: APIFormProps<any>, formRef: any) => {
    
   }, [props.value])
   
-    const onFinish = props.onFinish || ((values: any) => {
+  const onFinish = props.onFinish || ((values: any) => {
     const method = values[props.idProp || 'id'] || props.value ? 'put' : 'post'
     const succeeded = props.onRequestSucceeded || (() => {})
     const failed = props.onRequestFailed || (() => {})
