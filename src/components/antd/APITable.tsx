@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2022-05-28 18:22:45
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-11 15:00:08
+ * @LastEditTime: 2023-04-28 12:10:52
  * @Description: 
  * @Developer: 
  */
@@ -33,6 +33,8 @@ type Props<RecordType extends object = any, FormValues extends object = any > = 
 } & TableProps<RecordType>
 
 export default function APITable<RecordType extends object = any>(props: Props<RecordType>) {
+  const [scrollY, setScrollY] = useState(0)
+  const table = useRef<HTMLDivElement>(null)
   const searchForm = useRef<FormInstance<any>>(null)
   const params = {...(props.initialParams || {}), ...(props.params || {})}
   const [pageIndex, setPage] = useState(params?.page || 1)
@@ -62,6 +64,19 @@ export default function APITable<RecordType extends object = any>(props: Props<R
         }
       })
   }
+
+  const onWindowReize = () => {
+    setScrollY((table.current?.clientHeight || 0) - 60)
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', onWindowReize)
+    onWindowReize()
+
+    return () => {
+      window.removeEventListener('resize', onWindowReize)
+    }
+  }, [])
 
   useEffect(() => {
     props.loader && load(props.loader, params)
@@ -129,6 +144,8 @@ export default function APITable<RecordType extends object = any>(props: Props<R
         loading={loading}
         dataSource={props.loader ? data : props.data} 
         pagination={pagination}
+        scroll={props.scroll || {y: scrollY}}
+        ref={table}
       />
       {props.form && (
         <APIFormModal

@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-03 22:34:45
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-11 14:16:53
+ * @LastEditTime: 2023-04-28 14:05:15
  * @Description: 
  * @Developer: 
  */
@@ -33,7 +33,15 @@ export default class AdminQuestionListPage extends React.Component<Props & WithR
 
   render(): React.ReactNode {
     return (
-      <AdminPage>
+      <AdminPage
+        breadcrumbs={[{
+          label: '首页',
+          url: '../home'
+        },{
+          label: '问题管理',
+          url: '../questions'
+        }]}
+      >
         <Card style={{height: '100%'}} bodyStyle={{padding: 12, height: '100%'}}>
           <APITable
             bordered
@@ -47,7 +55,6 @@ export default class AdminQuestionListPage extends React.Component<Props & WithR
 
             size='small'
             rowKey='id'
-            // scroll={{y: 100}}
             pagination={{showSizeChanger: false}}
  
             columns={[{
