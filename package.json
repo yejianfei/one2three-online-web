@@ -14,6 +14,9 @@
     "type": "git",
     "url": "git+https://github.com/yejianfei/one2three-online-web.git"
   },
+  "publishConfig": {
+    "registry": "http://127.0.0.1:3001/npmjs/dofunc/"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
