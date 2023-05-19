@@ -31,7 +31,7 @@ export default function AdminPageWrapper(props: Props) {
   const { token: { colorBgContainer }} = theme.useToken()
   const [menus, setMenus] = useState([])
   useEffect(() => {
-    api.get<never[]>('http://localhost:8088/json/menus.json')
+    api.get<never[]>('https://api.endotube.cn/json/menus.json')
     .then((res) => setMenus(res))
   }, [])
   return (
