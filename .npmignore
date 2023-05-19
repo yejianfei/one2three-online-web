@@ -1,0 +1,6 @@
+src/
+config/
+public/
+.gitignore
+tsconfig.json
+webpack.config.js
