@@ -8,7 +8,8 @@
     "dev": "rm -rf dist && webpack serve --host 0.0.0.0 --config webpack.config.js --mode development",
     "web": "rm -rf dist && webpack serve --host 0.0.0.0 --config webpack.config.js --mode development",
     "local": "rm -rf dist && webpack serve --host 0.0.0.0 --config webpack.config.js --mode development --env local",
-    "build": "rm -rf dist && webpack --config webpack.config.js --mode production",
+    "build": "rm -rf dist && webpack --mode development --config webpack.config.js",
+    "dist": "rm -rf dist && webpack --mode production --config webpack.config.js",
     "beta": "npm run dist && npm publish && npm version prerelease --preid=beta && git push"
   },
   "repository": {
