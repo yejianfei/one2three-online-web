@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2022-05-26 13:54:33
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-05-21 21:50:33
+ * @LastEditTime: 2023-05-21 22:21:41
  * @Description: 
  * @Developer: 
  */
@@ -41,7 +41,7 @@ export default class LoginPage extends Component<Prop> {
       <BorderLayout style={{background: 'url(/images/login-banner.png)', backgroundRepeat: 'no-repeat', backgroundSize: '100%'}}>
         <BorderCenter>
           <Row justify='center'>
-            <Col><Image style={{height: 64, marginTop: 196}} src='/images/logo.png' /></Col>
+            <Col><Image style={{height: 64, marginTop: 196}} src='/images/logo-white.png' /></Col>
           </Row>
           <Card style={{width: 360, marginLeft: 'auto', marginRight: 'auto', marginTop: 200}} title="万图随预约及随访运营系统">
             <APIForm
