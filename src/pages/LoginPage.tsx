@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2022-05-26 13:54:33
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-05 11:48:26
+ * @LastEditTime: 2023-05-21 21:50:33
  * @Description: 
  * @Developer: 
  */
@@ -20,7 +20,7 @@ import {
 import APIForm from '../components/antd/APIForm'
 import Api from '../api'
 import BorderLayout, { BorderCenter, BorderSouth, BorderNorth, BorderWest, BorderEast } from '../components/BorderLayout'
-import View from '../components/View'
+import Image from '../components/Image'
 
 type Prop = {
   route: {
@@ -38,9 +38,12 @@ export default class LoginPage extends Component<Prop> {
 
   render() {
     return (
-      <BorderLayout>
+      <BorderLayout style={{background: 'url(/images/login-banner.png)', backgroundRepeat: 'no-repeat', backgroundSize: '100%'}}>
         <BorderCenter>
-          <Card style={{width: 360, marginLeft: 'auto', marginRight: 'auto', marginTop: 300}} title="万图随预约及随访运营系统">
+          <Row justify='center'>
+            <Col><Image style={{height: 64, marginTop: 196}} src='/images/logo.png' /></Col>
+          </Row>
+          <Card style={{width: 360, marginLeft: 'auto', marginRight: 'auto', marginTop: 200}} title="万图随预约及随访运营系统">
             <APIForm
               action="/login"
               name='login-form'

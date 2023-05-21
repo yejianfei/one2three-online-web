@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-03 13:55:07
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-05-05 15:13:59
+ * @LastEditTime: 2023-05-21 21:53:33
  * @Description: 
  * @Developer: 
  */
@@ -36,7 +36,7 @@ export default function AdminPageWrapper(props: Props) {
   const t = theme.useToken()
   const [menus, setMenus] = useState([])
   useEffect(() => {
-    api.get<never[]>('https://api.endotube.cn/json/menus.json')
+    api.get<never[]>('../json/menus.json')
     .then((res) => setMenus(res))
   }, [])
   return (
@@ -46,7 +46,7 @@ export default function AdminPageWrapper(props: Props) {
         <Row align='middle'>
           <Col  flex={1}>
             <Space size={24}>
-              <Image style={{height: 32, marginTop: 16}} src='/images/logo.png' />
+              <Image style={{height: 32, marginTop: 16}} src='/images/logo-white.png' />
               <Text style={{color:'#ffffff', fontSize: 24, fontWeight: 500}}>万图随预约随访运营系统</Text>
             </Space>
           </Col>

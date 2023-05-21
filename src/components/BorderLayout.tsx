@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-03 10:37:15
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-03 12:50:16
+ * @LastEditTime: 2023-05-21 21:31:33
  * @Description: 
  * @Developer: 
  */
@@ -11,10 +11,10 @@ import React from 'react'
 import View from './View'
 
 import './BorderLayout.scss'
-import { type } from 'os'
 import { isArray } from 'lodash'
 
 type BorderLayoutProps = {
+  style?: React.CSSProperties
   children: any
 }
 
@@ -103,11 +103,8 @@ export default function BorderLayout(props: BorderLayoutProps) {
     }, {} as any)
 
 
-
-  console.log(chidren)
-
   return (
-    <View className='boder-layout'>
+    <View className='boder-layout' style={props.style}>
         {chidren.north}
         <View className='center-container'>
           {chidren.west}
