@@ -164,7 +164,7 @@ export default function APICascader(props: APICascaderProps) {
       })
     } : undefined)}
     onChange={(value: any, selections: any[]) => {
-      if (props.onChange) {
+      if (value && props.onChange) {
         const items: any = props.multiple
           ? value.reduce((previous: string[] ,current: string[]) => {
             previous.push(current.join('/'))
@@ -173,7 +173,10 @@ export default function APICascader(props: APICascaderProps) {
           : value.join('/')
         
         props.onChange(items, selections)
+        return
       }
+
+      props.onChange && props.onChange('', selections)
     }}
   />)
 }

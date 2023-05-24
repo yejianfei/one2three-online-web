@@ -89,7 +89,7 @@ export default class AdminQuestionnaireListPage extends React.Component<Props & 
                   <Row>
                     <Col span={8}>
                       <Form.Item name={['keywords']}>
-                        <Input.Search placeholder='输入账号名称检索' allowClear enterButton onSearch={() => table.search()} />
+                        <Input.Search placeholder='输入问券标题检索' allowClear enterButton onSearch={() => table.search()} />
                       </Form.Item>
                     </Col>
                     <Col flex={1}>
@@ -105,7 +105,12 @@ export default class AdminQuestionnaireListPage extends React.Component<Props & 
                 )
               }
             }}
-          
+            form = {{
+              title: '问券',
+              action: '/admin/questionnaires',
+              loader: '/admin/questionnaires/:id',
+              name: 'questionnaire-form',
+            }}
           >
           </APITable>
         </Card>
