@@ -50,6 +50,10 @@ export default function (props: APIFormModalProps) {
           setLoading(false)
           setOpened(false)
         }}
+        onRequestFailed={(method, err, values) => {
+          setLoading(false)
+          props.form.onRequestFailed && props.form.onRequestFailed(method, err, values)
+        }}
       >
         {props.children}
       </APIForm>

@@ -35,10 +35,16 @@ export default function AdminPageWrapper(props: Props) {
   const { token: { colorBgContainer }} = theme.useToken()
   const t = theme.useToken()
   const [menus, setMenus] = useState([])
+
   useEffect(() => {
     api.get<never[]>('../json/menus.json')
     .then((res) => setMenus(res))
   }, [])
+
+  const errMessage: {[key: number]: string} = {
+    '5005003': '旧密码错误'
+  }
+
   return (
     <>
       <Layout style={{height: '100%'}}>
@@ -64,9 +70,10 @@ export default function AdminPageWrapper(props: Props) {
                     onClick={() => {
                       api.token = null
                       props.route.navigate('/login')
-                    }}>
-                      退出登录
-                    </Button>
+                    }}
+                  >
+                    退出登录
+                  </Button>
                 ]}
               >
                 <View style={{width: '100%', fontSize: 14, textAlign: 'center'}}>
@@ -106,16 +113,31 @@ export default function AdminPageWrapper(props: Props) {
         afterClose={() => setChangePassword(false)}
         title='修改密码'
         form={{
-          labelCol: {span: 4}
+          action: '/my/password',
+          labelCol: {span: 4},
+          onRequestFailed: (method, err, values) => {
+            console.log(err)
+          }
         }}
       >
-        <Form.Item name="old_password" label="旧密码" rules={[{ required: true }]}>
+        <Form.Item name="old_password" label="旧密码" rules={[{ required: true, message: '请输入旧密码' }]}>
           <Input.Password />
         </Form.Item>
-        <Form.Item name="old_password" label="新密码" rules={[{ required: true }]}>
+        <Form.Item name="new_password" label="新密码" rules={[ { required: true, message: '请输入新密码' } ]}>
           <Input.Password />
         </Form.Item>
-        <Form.Item name="old_password" label="密码确认" rules={[{ required: true }]}>
+        <Form.Item name="confirm_password" label="密码确认" dependencies={['new_password']} rules={[
+          { required: true, message: '请再次输入新密码' },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue('new_password') === value) {
+                return Promise.resolve();
+              }
+
+              return Promise.reject(new Error('密码与新密码不一致'));
+            },
+          }),
+        ]}>
           <Input.Password />
         </Form.Item>
       </APIFormModal>
