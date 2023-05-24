@@ -2,7 +2,7 @@
  * @Author: yejianfei
  * @Date: 2023-04-17 14:23:28
  * @LastEditors: yejianfei
- * @LastEditTime: 2023-04-17 17:31:49
+ * @LastEditTime: 2023-05-24 16:32:41
  * @Description: 
  * @Developer: 
  */
@@ -83,7 +83,6 @@ export default function APITreeSelect(props: APITreeSelectProps) {
         const url = typeof(props.loader) === 'string'
           ? props.loader : props.loader.children
 
-
         Promise
           .all( values.map((item) =>
             api.get(url, {
@@ -94,21 +93,25 @@ export default function APITreeSelect(props: APITreeSelectProps) {
           ))
           .then((children) => {
             setData((current) => {
-              return  [...current, ...children.flat().map((item: any) => {
-                const leaf = props.depth && props.depth <= item.full_path.split('/').length || item.leaf
-                return {
-                  key: item.full_path,
-                  value: item.full_path,
-                  title: item.name,
-                  ...item,
-                  pId: item.parent_id,
-                  isLeaf: leaf,
-                  checkable: !props.leafCheckableOnly || leaf,
-                  selectable: !props.leafSelectableOnly || leaf,
-                }
-              })]
+              return  [...current, ...children
+                .flat()
+                .filter((item: any, index, array) => {
+                  return array.findIndex((element: any) => element.id === item.id) === index
+                })
+                .map((item: any) => {
+                  const leaf = props.depth && props.depth <= item.full_path.split('/').length || item.leaf
+                  return {
+                    key: item.full_path,
+                    value: item.full_path,
+                    title: item.name,
+                    ...item,
+                    pId: item.parent_id,
+                    isLeaf: leaf,
+                    checkable: !props.leafCheckableOnly || leaf,
+                    selectable: !props.leafSelectableOnly || leaf,
+                  }
+                })]
             })
-        
           })
     }
   }, [props.value])
@@ -126,6 +129,7 @@ export default function APITreeSelect(props: APITreeSelectProps) {
         const items = props.value.split('/')
         return (
           <Tag 
+            key={props.value}
             {...props} 
             className='ant-select-selection-item' 
             children={data.filter((node) => items.includes(node.id)).map((node) => node.name).join('/')} 
