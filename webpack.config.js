@@ -106,7 +106,8 @@ module.exports = (env, options) => {
             },
             crossdomain: true,
             baseURL: '/api',
-            sourceUrl: '/api/afs/wsd'
+            sourceUrl: '/api/afs/wsd',
+            qrcode: 'https://api.endotube.cn/code'
           },
         })
       }),

@@ -8,16 +8,17 @@
  */
 import React from 'react'
 import AdminPage from '../../components/antd/AdminPage'
-import { Button, Card, Col, Form, Input, Row, Space, Radio } from 'antd'
+import { Button, Card, Col, Form, Input, Row, Space, Radio, Modal, QRCode } from 'antd'
 import APITable from '../../components/antd/APITable'
 import WithRouter, { WithRouteAttributeProps } from '../../components/WithRouter'
 import APISelect from '../../components/antd/APISelect'
 import IconFont from '../../icons'
 
 import { CancelRuleOptions, BooleanOptions, BooleanFilter } from '../../options'
+import APIFormModal from '../../components/antd/APIFormModal'
 
 type Props = {
-
+  
 }
 
 type RouteParams = {
@@ -25,12 +26,38 @@ type RouteParams = {
 }
 
 type State = {
+  showQrCode: boolean
+  path: string
 }
 
 @WithRouter()
 export default class AdminDiagnosticListPage extends React.Component<Props & WithRouteAttributeProps<RouteParams>, State> {
 
-  readonly state: Readonly<State> = {}
+  base: string = CONFIG.http.qrcode
+
+  readonly state: Readonly<State> = {
+    showQrCode: false,
+    path: ''
+  }
+
+  onOpenQrCode(path: string) {
+    this.setState({ showQrCode: true, path })
+  }
+
+  download() {
+    const canvas = document.getElementById('qrcode')?.querySelector<HTMLCanvasElement>('canvas');
+    if (canvas) {
+      const url = canvas.toDataURL();
+      const a = document.createElement('a');
+      a.download = 'QRCode.png';
+      a.href = url;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      this.setState({ showQrCode: false })
+    }
+  }
 
   render(): React.ReactNode {
     return (
@@ -82,12 +109,13 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
               title: '操作',
               dataIndex: 'operation',
               align: 'center',
-              width: 100,
+              width: 170,
               render: ((text: string, record: any, index: number, instance: any) => {
                 return (
                   <Space>
                     <Button type="link" onClick={() => instance.modal(record.id)}>编辑</Button>
                     <Button danger type="link" onClick={() => instance.delete(record.id)}>删除</Button>
+                    <Button type="link" onClick={() => this.onOpenQrCode(record.full_path)}>二维码</Button>
                   </Space>
                 )
               }) as any
@@ -221,6 +249,21 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
           >
           </APITable>
         </Card>
+        <Modal 
+          title="科室二维码" 
+          open={this.state.showQrCode} 
+          onOk={() => this.download()} 
+          onCancel={() => this.setState({ showQrCode: false })}
+          okText='下载'
+          cancelText='关闭'
+        >
+          <Row>
+            <Col span={8}></Col>
+            <Col id='qrcode'>
+              <QRCode value={`${this.base}?qrcode=${this.state.path}`} />
+            </Col>
+          </Row>
+        </Modal>
       </AdminPage>
     )
   }
