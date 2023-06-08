@@ -44,3 +44,19 @@ export const HospitalGroupFilter: {[key: string]: string} = {
   'cn.com.one2three.hospital.doctor': '医生',
   'cn.com.one2three.hospital.nurse': '护士'
 }
+
+export const UserTypeOptions: {id: number, name: string}[] = [
+  {
+    id: 0,
+    name: '默认'
+  },
+  {
+    id: 1,
+    name: '医生端管理'
+  }
+]
+
+export const UserTypeFilter: {[key: number]: string} = {
+  0: '默认',
+  1: '医生端管理'
+}

@@ -14,7 +14,7 @@ import APITable from '../../components/antd/APITable'
 import WithRouter, { WithRouteAttributeProps } from '../../components/WithRouter'
 import APITreeSelect from '../../components/antd/APITreeSelect'
 
-import { HospitalGroupOptions, HospitalGroupFilter } from '../../options'
+import { HospitalGroupOptions, HospitalGroupFilter, UserTypeOptions, UserTypeFilter } from '../../options'
 
 type Props = {
 
@@ -53,31 +53,32 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
             pagination={{showSizeChanger: false}}
  
             columns={[{
-              title: '账号名称',
+              title: '登录手机',
               width: 200,
               align: 'center',
-              dataIndex: 'username'
+              dataIndex: 'phone'
             },{
               title: '真实姓名',
               width: 200,
               align: 'center',
               dataIndex: 'name'
             },{
-              title: '手机号码',
-              width: 200,
-              align: 'center',
-              dataIndex: 'phone'
-            },{
               title: '电子邮箱',
               width: 200,
               align: 'center',
               dataIndex: 'email'
             },{
-              title: '类型',
+              title: '医护角色',
               width: 200,
               align: 'center',
               dataIndex: 'group',
-              render: (value: number) => HospitalGroupFilter[value]
+              render: (value: string) => HospitalGroupFilter[value]
+            },{
+              title: '账户类型',
+              width: 200,
+              align: 'center',
+              dataIndex: 'type',
+              render: (value: number) => UserTypeFilter[value]
             },{
               title: '操作',
               dataIndex: 'operation',
@@ -126,12 +127,12 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
               children: (values) => (
                 <>
                   <Form.Item
-                    label='账号名称'
+                    label='登录手机'
                     labelCol={{span: 5}}
                     name={['username']}
-                    rules={[{ required: true, message: '请输入登录账号' }]}
+                    rules={[{ required: true, message: '请输入登录手机' }]}
                   >
-                    <Input disabled={!!values.id} placeholder='输入登录账号' />
+                    <Input disabled={!!values.id} placeholder='输入登录手机' />
                   </Form.Item>
                   <Form.Item
                     label='登录密码'
@@ -149,13 +150,6 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                     <Input placeholder='输入真实姓名（可选）' />
                   </Form.Item>
                   <Form.Item
-                    label='联系手机'
-                    labelCol={{span: 5}}
-                    name={['phone']}
-                  >
-                    <Input placeholder='输入联系手机（可选）' />
-                  </Form.Item>
-                  <Form.Item
                     label='电子邮箱'
                     labelCol={{span: 5}}
                     name={['email']}
@@ -163,12 +157,20 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                     <Input placeholder='输入联系邮箱（可选）' />
                   </Form.Item>
                   <Form.Item
-                    label='类型'
+                    label='医护角色'
                     labelCol={{span: 5}}
                     name={['group']}
                     rules={[{ required: true, message: '请选择' }]}
                   >
                     <Radio.Group options={HospitalGroupOptions.map(item => ({label: item.name, value: item.id}))} />
+                  </Form.Item>
+                  <Form.Item
+                    label='账户类型'
+                    labelCol={{span: 5}}
+                    name={['type']}
+                    rules={[{ required: true, message: '请选择' }]}
+                  >
+                    <Radio.Group options={UserTypeOptions.map(item => ({label: item.name, value: item.id}))} />
                   </Form.Item>
                   <Form.Item
                     label='医院科室'
