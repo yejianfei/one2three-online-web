@@ -7,9 +7,10 @@
  * @Developer: 
  */
 import React, { useEffect, useState } from 'react'
-import { App, AppProps } from 'antd'
+import { App, AppProps, message } from 'antd'
 import { NavigateFunction, Params, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAppProps } from 'antd/es/app/context'
+import { ArgsProps } from 'antd/es/message'
 
 export type RouteAttribute<P extends Params<string>> = {
   navigate: NavigateFunction
@@ -31,6 +32,14 @@ export type WithOptionRouteAttributeProps<P extends Params<string>> = {
   route?: RouteAttribute<P>
 }
 
+type RouterContextProps = {
+  message: (props: ArgsProps) => void
+}
+
+export const RouterContext = React.createContext<RouterContextProps>({
+  message: () => {},
+})
+
 export default function(options?: WithRouterOptions<Params<string>>): any {
   return (PageComponent: React.ComponentType<any>) => () => {
    
@@ -38,6 +47,7 @@ export default function(options?: WithRouterOptions<Params<string>>): any {
     const [searchParams, _setSearchParams] = useSearchParams()
     const [props, setProps] = useState({})
     const [enter, setEnter] = useState(false)
+    const [messageApi, contextHolder] = message.useMessage();
     const route = {
       navigate: useNavigate(),
       params: useParams(),
@@ -58,9 +68,15 @@ export default function(options?: WithRouterOptions<Params<string>>): any {
 
     return (
       <>
-        {
-          enter ?  <PageComponent {...props} route={route} app={app}></PageComponent> : <div>load...</div>
-        }
+        <RouterContext.Provider value={{
+          message: (props) => messageApi.open(props)
+        }}
+        >
+          {
+            enter ?  <PageComponent {...props} route={route} app={app}></PageComponent> : <div>load...</div>
+          }
+          {contextHolder}
+        </RouterContext.Provider>
       </>
     )
   }

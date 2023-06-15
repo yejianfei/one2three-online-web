@@ -11,6 +11,7 @@ import { Form, FormProps } from 'antd'
 import { cloneDeep, merge } from 'lodash'
 
 import Api from '../../api'
+import { ArgsProps } from 'antd/es/message'
 
 export type APIFormProps<Values> = {
   ref?: any
@@ -18,11 +19,17 @@ export type APIFormProps<Values> = {
   idProp?: string
   action?: string
   loader?: string
+  message?: {
+    succeeded?: ArgsProps
+    failed?: ArgsProps
+  },
   onBeforeLoad?: (value: string) => Promise<any>
   onLoaded?: (value: string) => Promise<any>
   onBeforeRequest?: (method: 'post' | 'put', values: Values) => (Values | false) | Promise<Values | false>
   onRequestSucceeded?: <R = any>(method: 'post' | 'put', res: R, values: Values) => void
   onRequestFailed?: (method: 'post' | 'put', error: Error, values: Values,) => void
+  onSucceededMessage?: <R = any>(method: 'post' | 'put', res: R, values: Values) => void
+  onFailedMessage?: (method: 'post' | 'put', error: Error, values: Values) => void
 } & FormProps<Values>
 
 const api = Api()
@@ -79,10 +86,13 @@ export default forwardRef((props: APIFormProps<any>, formRef: any) => {
   const attributes = { ...props, onFinish }
   delete (attributes as any).idProp
   delete (attributes as any).action
+  delete (attributes as any).config
   delete (attributes as any).onBeforeRequest
   delete (attributes as any).onRequestSucceeded
   delete (attributes as any).onRequestFailed
   delete (attributes as any).onLoaded
+  delete (attributes as any).onSucceededMessage
+  delete (attributes as any).onFailedMessage
   
   return <Form ref={formRef} { ...attributes as any } />
 })

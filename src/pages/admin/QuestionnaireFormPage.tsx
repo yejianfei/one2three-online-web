@@ -88,7 +88,19 @@ export default class AdminQuestionnaireFormPage extends React.Component<Props & 
                     label='诊疗项目'
                     wrapperCol={{span: 8}}
                     name={['path']}
-                    rules={[{ required: true, message: '请选择诊疗项目' }]}
+                    rules={[
+                      { required: true, validator: (_, value: string) => {
+                        if (!value) {
+                          return Promise.reject(new Error('请正确选择医院/科室/诊疗项目'));
+                        }
+
+                        if (value && value.split('/').length !== 3) {
+                          return Promise.reject(new Error('请正确选择医院/科室/诊疗项目'));
+                        }
+
+                        return Promise.resolve();
+                      }}
+                    ]}
                   >
                     <APICascader 
                       loader={{

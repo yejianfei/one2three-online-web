@@ -11,7 +11,7 @@ import AdminPage from '../../components/antd/AdminPage'
 import { Button, Card, Col, Form, Input, Row, Space, Radio } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import APITable from '../../components/antd/APITable'
-import WithRouter, { WithRouteAttributeProps } from '../../components/WithRouter'
+import WithRouter, { RouterContext, WithRouteAttributeProps } from '../../components/WithRouter'
 import APITreeSelect from '../../components/antd/APITreeSelect'
 
 import { HospitalGroupOptions, HospitalGroupFilter, UserTypeOptions, UserTypeFilter } from '../../options'
@@ -31,6 +31,13 @@ type State = {
 export default class AdminUserListPage extends React.Component<Props & WithRouteAttributeProps<RouteParams>, State> {
 
   readonly state: Readonly<State> = {}
+
+  static contextType = RouterContext
+  context!: React.ContextType<typeof RouterContext>
+
+  errMessage: {[key: number]: string} = {
+    10101: '用户已存在'
+  }
 
   render(): React.ReactNode {
     return (
@@ -123,6 +130,12 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
               initialValues: {
                 mode: 0
               },
+              onSucceededMessage: (method, res, values) => {
+                this.context.message({type: 'success', content: '操作成功'})
+              },
+              onFailedMessage: (method: 'post' | 'put', error: any, values: any) => {
+                this.context.message({type: 'error', content: this.errMessage[error] || '未知错误，请联系管理员'})
+              },
               onLoaded: async (values: any) => ({...values, password: Date.now()}),
               children: (values) => (
                 <>
@@ -140,7 +153,7 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                     name={['password']}
                     rules={[{ required: true, message: '请输入登录密码' }]}
                   >
-                    <Input.Password disabled={!!values.id} placeholder='入登录密码' />
+                    <Input.Password disabled={!!values.id} placeholder='输入登录密码' />
                   </Form.Item>
                   <Form.Item
                     label='真实姓名'
@@ -176,7 +189,20 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                     label='医院科室'
                     labelCol={{span: 5}}
                     name={['organization_paths']}
-                    rules={[{ required: true, message: '请选择' }]}
+                    rules={[
+                      { required: true, validator: (_, value: string[]) => {
+                        if (!value || value.length === 0) {
+                          return Promise.reject(new Error('请正确选择医院/科室'));
+                        }
+
+                        const array = value.filter((item: string) => !item || item.split('/').length !== 2)
+                        if (array && array.length !== 0) {
+                          return Promise.reject(new Error('请正确选择医院/科室'));
+                        }
+
+                        return Promise.resolve();
+                      }}
+                    ]}
                   >
                     <APITreeSelect 
                       loader={{
