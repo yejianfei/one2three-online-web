@@ -211,6 +211,14 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
                     <Radio.Group options={BooleanOptions.map(item => ({label: item.name, value: item.id}))} />
                   </Form.Item>
                   <Form.Item
+                    label='医生排班'
+                    labelCol={{span: 5}}
+                    name={['extra', 'doctor_schedule']}
+                    rules={[{ required: true, message: '请选择' }]}
+                  >
+                    <Radio.Group options={BooleanOptions.map(item => ({label: item.name, value: item.id}))} />
+                  </Form.Item>
+                  <Form.Item
                     label='取消限制'
                     labelCol={{span: 5}}
                     name={['extra', 'cancel_rule']}
@@ -224,7 +232,7 @@ export default class AdminDiagnosticListPage extends React.Component<Props & Wit
                         hidden={values?.extra?.cancel_rule !== 1}
                         label='小时'
                         labelCol={{span: 5}}
-                        name={['extra', 'cancel_rule_day']}
+                        name={['extra', 'cancel_rule_hour']}
                         rules={[{ required: true, message: '请输入小时' }]}
                       >
                         <Input type='number' placeholder='请输入小时' addonAfter='小时后'/>

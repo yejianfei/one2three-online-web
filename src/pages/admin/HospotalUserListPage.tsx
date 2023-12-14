@@ -128,7 +128,8 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
               loader: '/admin/users/:id',
               name: 'user-form',
               initialValues: {
-                mode: 0
+                mode: 0,
+                groups: ['cn.com.one2three.hospital.doctor', 'cn.com.one2three.hospital.nurse']
               },
               onSucceededMessage: (method, res, values) => {
                 this.context.message({type: 'success', content: '操作成功'})
@@ -143,7 +144,7 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                     label='登录手机'
                     labelCol={{span: 5}}
                     name={['username']}
-                    rules={[{ required: true, message: '请输入登录手机' }]}
+                    rules={[{ required: true, message: '请输入登录手机', pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/ }]}
                   >
                     <Input disabled={!!values.id} placeholder='输入登录手机' />
                   </Form.Item>
