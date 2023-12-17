@@ -144,7 +144,10 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                     label='登录手机'
                     labelCol={{span: 5}}
                     name={['username']}
-                    rules={[{ required: true, message: '请输入登录手机', pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/ }]}
+                    rules={[
+                      { required: true, message: '请输入登录手机' },
+                      { message: '请输入正确的手机', pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/ }
+                    ]}
                   >
                     <Input disabled={!!values.id} placeholder='输入登录手机' />
                   </Form.Item>
@@ -160,6 +163,10 @@ export default class AdminUserListPage extends React.Component<Props & WithRoute
                     label='真实姓名'
                     labelCol={{span: 5}}
                     name={['name']}
+                    rules={[
+                      { required: true, message: '请输入真实姓名' },
+                      { message: '只能输入中文字符', pattern: /^[\u4e00-\u9fa5]+$/ }
+                    ]}
                   >
                     <Input placeholder='输入真实姓名（可选）' />
                   </Form.Item>
