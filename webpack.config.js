@@ -125,7 +125,7 @@ module.exports = (env, options) => {
     },
     devServer: {
       historyApiFallback: true,
-      port: 8088,
+      port: 8087,
       compress: true,
       proxy: {
         '/api': env.local ? {
