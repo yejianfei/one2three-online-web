@@ -75,6 +75,15 @@ export default class LoginPage extends Component<Prop> {
             </APIForm>
           </Card>
         </BorderCenter>
+        <BorderSouth>
+          <Row justify='center'>
+            <Col>
+              <Button style={{fontSize: '16px', marginBottom: '10px'}} type='link' href='https://beian.miit.gov.cn/' target='_blank' >
+                粤ICP备2021034598号
+              </Button>
+            </Col>
+          </Row>
+        </BorderSouth>
       </BorderLayout>
     )
   }

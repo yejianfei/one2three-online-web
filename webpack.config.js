@@ -132,8 +132,7 @@ module.exports = (env, options) => {
           target: 'http://127.0.0.1:8980/',
           pathRewrite: { '^/api': '' },
         } : {
-          target: 'http://openvpn.dofunc.com:8024/',
-          secure: false,
+          target: 'https://api.one2three.com.cn/',
           changeOrigin: true
         }
       }
